@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 from matplotlib.ticker import LogFormatterMathtext,FuncFormatter
 from plotfig import plot2D,plot1D,plot_srcpsf,plot_detpsf
-from saber.trans import ideal_trans_sharp_edge 
-from saber import estimate_blur_psfs,get_source_psf,get_detector_psf,get_effective_psf,apply_blur_psfs
+from pysaber.trans import ideal_trans_sharp_edge 
+from pysaber import estimate_blur_psfs,get_source_psf,get_detector_psf,get_effective_psf,apply_blur_psfs
 
 SAVE_FOLDER = '/Users/mohan3/Desktop/Journals/Blur-Modelling/figs'
 

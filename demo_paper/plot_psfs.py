@@ -1,7 +1,7 @@
 import yaml
 import numpy as np
 from plotfig import plot2D,plot1D,plot_srcpsf,plot_detpsf
-from saber import estimate_blur_psfs,get_source_psf,get_detector_psf,get_effective_psf,apply_blur_psfs
+from pysaber import estimate_blur_psfs,get_source_psf,get_detector_psf,get_effective_psf,apply_blur_psfs
 
 pix_wid = 0.675
 sod = [24800]

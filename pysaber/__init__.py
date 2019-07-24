@@ -1,2 +1,2 @@
-from saber.main import get_blur_params,estimate_blur_psfs,get_source_psf,get_detector_psf,get_effective_psf,apply_blur_psfs,get_trans_fit
-from saber.deblur import wiener_deblur,least_squares_deblur
+from pysaber.main import get_blur_params,estimate_blur_psfs,get_source_psf,get_detector_psf,get_effective_psf,apply_blur_psfs,get_trans_fit
+from pysaber.deblur import wiener_deblur,least_squares_deblur

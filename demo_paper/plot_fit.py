@@ -1,8 +1,8 @@
 import yaml
 import numpy as np
 from PIL import Image
-from saber.trans import ideal_trans_sharp_edge 
-from saber import apply_blur_psfs
+from pysaber.trans import ideal_trans_sharp_edge 
+from pysaber import apply_blur_psfs
 from plotfig import plot2D,plot1D,plot_srcpsf,plot_detpsf
 
 SAVE_FOLDER = '/Users/mohan3/Desktop/Journals/Blur-Modelling/figs'

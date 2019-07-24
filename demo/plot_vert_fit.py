@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image #To read images in TIFF format
-from saber import get_trans_fit #Compute the blurred radiograph as predicted by the blur model given parameters of source and detector blurs 
+from pysaber import get_trans_fit #Compute the blurred radiograph as predicted by the blur model given parameters of source and detector blurs 
 import matplotlib.pyplot as plt #To display images
     
 pix_wid = 0.675 #Width of each pixel in micrometers

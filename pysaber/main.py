@@ -1,9 +1,9 @@
 import time
 import numpy as np
 import yaml
-from saber.trans import ideal_trans_sharp_edge
-from saber.models import SourceBlur,DetectorBlur,Transmission,get_scale,get_FWHM,combine_psfs,convolve_psf
-from saber.optim import error_function,jacobian_function,set_model_params
+from pysaber.trans import ideal_trans_sharp_edge
+from pysaber.models import SourceBlur,DetectorBlur,Transmission,get_scale,get_FWHM,combine_psfs,convolve_psf
+from pysaber.optim import error_function,jacobian_function,set_model_params
 from scipy.optimize import minimize#,check_grad,approx_fprime
 
 def get_blur_params(norm_rads,sod,sdd,pix_wid,convg_thresh=1e-6,bdary_mask_perc=5,pad_factor=[3,3],mask=None,edge_type=None):

@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 from matplotlib.ticker import LogFormatterMathtext,FuncFormatter
 
-from saber.trans import ideal_trans_sharp_edge 
-from saber import estimate_blur_psfs
+from pysaber.trans import ideal_trans_sharp_edge 
+from pysaber import estimate_blur_psfs
 
 start_time = time.time()
 

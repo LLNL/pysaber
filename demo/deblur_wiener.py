@@ -1,5 +1,5 @@
 import numpy as np
-from saber import wiener_deblur #To deblur using Wiener filtering
+from pysaber import wiener_deblur #To deblur using Wiener filtering
 import matplotlib.pyplot as plt #To display images
 from PIL import Image #To read images in TIFF format
 

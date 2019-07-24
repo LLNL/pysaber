@@ -1,5 +1,5 @@
 import numpy as np
-from saber import least_squares_deblur
+from pysaber import least_squares_deblur
 import matplotlib.pyplot as plt
 from PIL import Image
 import yaml

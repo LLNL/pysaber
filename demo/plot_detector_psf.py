@@ -1,7 +1,7 @@
 import numpy as np #For mathematics on vectors
 import matplotlib.pyplot as plt #For displaying images
 from matplotlib.colors import LogNorm #To display image values in logarithm scale 
-from saber import get_detector_psf #To compute PSF of detector blur
+from pysaber import get_detector_psf #To compute PSF of detector blur
 
 pix_wid = 0.675 #Width of each pixel in micrometers
 #Parameters of detector blur

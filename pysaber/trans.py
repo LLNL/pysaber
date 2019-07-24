@@ -2,13 +2,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage.measure import label,find_contours
-from PIL import Image
-from scipy.ndimage.morphology import distance_transform_edt
+#from PIL import Image
+#from scipy.ndimage.morphology import distance_transform_edt
 import csv
 import sys
-from scipy.interpolate import Rbf,interp2d
+#from scipy.interpolate import Rbf,interp2d
 from skimage.morphology import binary_opening
-from scipy import ndimage
+#from scipy import ndimage
 from sklearn.linear_model import RANSACRegressor
 
 def get_contour(rad,thresh):

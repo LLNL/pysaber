@@ -1,6 +1,6 @@
 import numpy as np #For mathematics on vectors
 import matplotlib.pyplot as plt #For plotting and showing images
-from saber import get_source_psf #To compute PSF of source blur 
+from pysaber import get_source_psf #To compute PSF of source blur 
 
 pix_wid = 0.675 #Width of each pixel in micrometers
 #Parameters of X-ray source blur

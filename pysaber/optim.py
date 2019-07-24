@@ -1,5 +1,5 @@
 import numpy as np
-from saber.models import combine_psfs,convolve_psf
+from pysaber.models import combine_psfs,convolve_psf
  
 def set_model_params(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est):
     """

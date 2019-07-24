@@ -1,5 +1,5 @@
 import numpy as np
-from saber import wiener_deblur
+from pysaber import wiener_deblur
 import matplotlib.pyplot as plt
 from PIL import Image
 import yaml

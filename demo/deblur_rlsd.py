@@ -1,5 +1,5 @@
 import numpy as np
-from saber import least_squares_deblur #To deblur using regularized least squares deconvolution
+from pysaber import least_squares_deblur #To deblur using regularized least squares deconvolution
 import matplotlib.pyplot as plt #To display images
 from PIL import Image #To read images in TIFF format
 

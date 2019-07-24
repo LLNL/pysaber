@@ -1,5 +1,5 @@
-# SABER
-SABER is a python package for characterizing the X-ray source and detector blur in cone-beam X-ray imaging systems. Note that even parallel beam X-rays in synchrotrons are in fact cone beams albeit with a large source to object distance. X-ray images, also called radiographs, are simultaneously blurred by both the X-ray source spot blur and detector blur. This package uses a numerical optimization algorithm to disentangle and estimate both forms of blur simultaneously.The point spread function (PSF) of X-ray source blur is modeled using an exponential density function with two parameters. The first parameter is the full width half maximum (FWHM) of the PSF along the x-axis (row-wise) and second is the FWHM along the y-axis (column-axis). The PSF of detector blur is modeled as the sum of two exponential density functions, each with its own FWHM parameter, that is mixed together by a mixture (or weighting) parameter. All these parameters are then estimated using numerical optimization from normalized radiographs of a sharp edge such as a thick Tungsten plate rollbar. It is recommended to acquire radiographs of the sharp edge at two different mutually perpendicular orientations and also repeat this process at two different values of the ratio of source to object distance (SOD) and object to detector distance (ODD). Once the parameters of both source and detector blurs are estimated, this package is also useful to reduce blur in radiographs using deblurring algorithms. Currently, Wiener filtering and regularized least squares deconvolution are two deblurring algorithms that are supported for deblurring. Both these techniques use the estimated blur parameters to deblur radiographs. The paper listed in the below reference section contains more information on the theory behind this package package. If you find this package useful, please cite the paper referenced below in your publications.
+# PySABER
+PySABER is a python package for characterizing the X-ray source and detector blur in cone-beam X-ray imaging systems. Note that even parallel beam X-rays in synchrotrons are in fact cone beams albeit with a large source to object distance. X-ray images, also called radiographs, are simultaneously blurred by both the X-ray source spot blur and detector blur. This package uses a numerical optimization algorithm to disentangle and estimate both forms of blur simultaneously.The point spread function (PSF) of X-ray source blur is modeled using an exponential density function with two parameters. The first parameter is the full width half maximum (FWHM) of the PSF along the x-axis (row-wise) and second is the FWHM along the y-axis (column-axis). The PSF of detector blur is modeled as the sum of two exponential density functions, each with its own FWHM parameter, that is mixed together by a mixture (or weighting) parameter. All these parameters are then estimated using numerical optimization from normalized radiographs of a sharp edge such as a thick Tungsten plate rollbar. It is recommended to acquire radiographs of the sharp edge at two different mutually perpendicular orientations and also repeat this process at two different values of the ratio of source to object distance (SOD) and object to detector distance (ODD). Once the parameters of both source and detector blurs are estimated, this package is also useful to reduce blur in radiographs using deblurring algorithms. Currently, Wiener filtering and regularized least squares deconvolution are two deblurring algorithms that are supported for deblurring. Both these techniques use the estimated blur parameters to deblur radiographs. The paper listed in the below reference section contains more information on the theory behind this package package. If you find this package useful, please cite the paper referenced below in your publications.
 
 
 ## References
@@ -28,21 +28,21 @@ This python package has two useful functionalities. First, it can extract the PS
 * The steps involved in estimating blur PSFs are outlined below. The example python script [demo/fit_blur_model.py](demo/fit_blur_model.py) demonstrates estimation of parameters of blur PSFs from radiographs of a Tungsten sharp edge rollbar.
     * Acquire radiographs of a straight sharp edge such as a Tungsten edge rollbar. Radiographs must be acquired at two different perpendicular orientations and at two different values of SOD/ODD.
     * Normalize each radiograph. For each radiograph, acquire a bright field image (measurements with X-rays but no sample) and a dark field image (measurements without X-rays). Then, compute the normalized radiograph by dividing the difference between the radiograph and the dark field image with the difference between the bright field and the dark field image.
-    * Using the normalized radiographs, estimate parameters of X-ray source blur and detector blur using the function `saber.get_blur_params`.
-* Next, ensure that the estimated parameters are indeed a good fit for the measured data. This is done by comparing line profiles across the sharp edge between the measured radiograph and the prediction from the blur model output. The output of the blur model given parameters of source and detector blurs is given by the function `saber.get_trans_fit`. Carefully zoom into the region where the edge lies and verify if the predicted blur matches with the blur in the measured radiograph. The python scripts [demo/plot_horz_fit.py](demo/plot_horz_fit.py) and [demo/plot_vert_fit.py](demo/plot_vert_fit.py) show examples of such comparisons. If the fit is not tight, consider reducing the value of the input argument `convg_thresh` of the function `saber.get_blur_params` to obtain a better fit.
-* Lastly, save or visualize the PSF of source and detector blurs. The PSF of source blur is given by the function `saber.get_source_psf` and PSF of detector blur is given by `saber.get_detector_psf`. The example python scripts [demo/plot_source_psf.py](demo/plot_source_psf.py) and [demo/plot_detector_psf.py](demo/plot_detector_psf.py) display source and detector PSFs as images.
+    * Using the normalized radiographs, estimate parameters of X-ray source blur and detector blur using the function `pysaber.get_blur_params`.
+* Next, ensure that the estimated parameters are indeed a good fit for the measured data. This is done by comparing line profiles across the sharp edge between the measured radiograph and the prediction from the blur model output. The output of the blur model given parameters of source and detector blurs is given by the function `pysaber.get_trans_fit`. Carefully zoom into the region where the edge lies and verify if the predicted blur matches with the blur in the measured radiograph. The python scripts [demo/plot_horz_fit.py](demo/plot_horz_fit.py) and [demo/plot_vert_fit.py](demo/plot_vert_fit.py) show examples of such comparisons. If the fit is not tight, consider reducing the value of the input argument `convg_thresh` of the function `pysaber.get_blur_params` to obtain a better fit.
+* Lastly, save or visualize the PSF of source and detector blurs. The PSF of source blur is given by the function `pysaber.get_source_psf` and PSF of detector blur is given by `pysaber.get_detector_psf`. The example python scripts [demo/plot_source_psf.py](demo/plot_source_psf.py) and [demo/plot_detector_psf.py](demo/plot_detector_psf.py) display source and detector PSFs as images.
 ### Deblur Radiographs
-Once the parameters of source and detector PSFs are estimated, radiographs of any arbitrary sample acquired at any source to object distance (SOD) and source to detector distance (SDD) can be deblurred using various techniques. To deblur a radiograph using Wiener filtering, the function `saber.wiener_deblur` is used. To deblur using regularized least squares deconvolution (RLSD), use the function `saber.least_squares_deblur`. The python scripts [demo/deblur_wiener.py](demo/deblur_wiener.py) and [demo/deblur_rlsd.py](demo/deblur_rlsd.py) are examples that demonstrate radiograph deblur. 
+Once the parameters of source and detector PSFs are estimated, radiographs of any arbitrary sample acquired at any source to object distance (SOD) and source to detector distance (SDD) can be deblurred using various techniques. To deblur a radiograph using Wiener filtering, the function `pysaber.wiener_deblur` is used. To deblur using regularized least squares deconvolution (RLSD), use the function `pysaber.least_squares_deblur`. The python scripts [demo/deblur_wiener.py](demo/deblur_wiener.py) and [demo/deblur_rlsd.py](demo/deblur_rlsd.py) are examples that demonstrate radiograph deblur. 
 
 
 ## Functions
-This section describes the various functions available in this package along with the corresponding input arguments and return values. The information in this section can also be obtained using the python help function. For example, to get help in using the function `saber.get_blur_params`, run the following lines in python -
+This section describes the various functions available in this package along with the corresponding input arguments and return values. The information in this section can also be obtained using the python help function. For example, to get help in using the function `pysaber.get_blur_params`, run the following lines in python -
 ```python
-from saber import get_blur_params #Import the function get_blur_params
-help(get_blur_params) #To learn more about saber.get_blur_params
+from pysaber import get_blur_params #Import the function get_blur_params
+help(get_blur_params) #To learn more about pysaber.get_blur_params
 ```
 
-#### saber.get_blur_params
+#### pysaber.get_blur_params
 ```
 get_blur_params(norm_rads, sod, sdd, pix_wid, convg_thresh=1e-06, bdary_mask_perc=5, pad_factor=[3, 3], mask=None, edge_type=None)
     Estimate parameters of point spread functions (PSF) that model X-ray source blur and detector blur from normalized radiographs of a straight sharp edge or two mutually perpendicular sharp edges. 
@@ -65,7 +65,7 @@ get_blur_params(norm_rads, sod, sdd, pix_wid, convg_thresh=1e-06, bdary_mask_per
         list: Estimated parameters of the transmission function for each input radiograph. This return value is a list of lists, where each inner nested list consists of two parameters of type float. These float values give the low and high values respectively of the transmission function. The number of nested lists in the returned list equals the number of input radiographs. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise.
 ```
 
-#### saber.get_trans_fit
+#### pysaber.get_trans_fit
 ```
 get_trans_fit(norm_rad, sod, sdd, pix_wid, src_params, det_params, trans_params, pad_factor=[3, 3], edge_type=None)
     For a measured radiograph consisting of a straight sharp edge or two mutually perpendicular edges, get the ideal transmission function and a prediction from the blur model for the normalized radiograph in the presence of X-ray source and detector blurs. 
@@ -82,7 +82,7 @@ get_trans_fit(norm_rad, sod, sdd, pix_wid, src_params, det_params, trans_params,
         edge_type (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If edge_type is perpendicular, then each radiograph is assumed to have two mutually perpendicular edges and a single straight edge otherwise. Currently, choosing perpendicular as edge_type is not recommended since it isn't a verified functionality and may lead to unstable behavior.
 ```
 
-#### saber.get_source_psf
+#### pysaber.get_source_psf
 ```
 get_source_psf(pix_wid, src_params, sod=1, sdd=2)
     Get point spread function (PSF) of X-ray source blur.
@@ -97,7 +97,7 @@ get_source_psf(pix_wid, src_params, sod=1, sdd=2)
         numpy.ndarray: 2D array of source blur PSF
 ```
 
-#### saber.get_detector_psf
+#### pysaber.get_detector_psf
 ```
 get_detector_psf(pix_wid, det_params)
     Get point spread function (PSF) of detector blur
@@ -110,7 +110,7 @@ get_detector_psf(pix_wid, det_params)
         numpy.ndarray: 2D array of detector blur PSF
 ```
 
-#### saber.get_effective_psf
+#### pysaber.get_effective_psf
 ```
 get_effective_psf(pix_wid, src_params, det_params, sod=1, sdd=2)
     Get point spread function (PSF) of the combined effect of X-ray source and detector blur.
@@ -126,7 +126,7 @@ get_effective_psf(pix_wid, src_params, det_params, sod=1, sdd=2)
         numpy.ndarray: 2D array of effective blur PSF
 ```
 
-#### saber.wiener_deblur
+#### pysaber.wiener_deblur
 ```
 wiener_deblur(norm_rad, sod, sdd, pix_wid, src_params, det_params, reg_param)
     Function to reduce blur (deblur) in a radiograph using Wiener filtering.     
@@ -144,7 +144,7 @@ wiener_deblur(norm_rad, sod, sdd, pix_wid, src_params, det_params, reg_param)
         numpy.ndarray: Deblurred radiograph using a Wiener filter.
 ```
 
-#### saber.least_squares_deblur
+#### pysaber.least_squares_deblur
 ```
 least_squares_deblur(norm_rad, sod, sdd, pix_wid, src_params, det_params, reg_param, init_rad=None, weights=None, convg_thresh=0.01)
     Function to reduce blur (deblur) in radiographs using a regularized least squares iterative algorithm.     

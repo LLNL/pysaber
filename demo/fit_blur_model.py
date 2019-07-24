@@ -1,6 +1,6 @@
 import numpy as np #For mathematics on vectors
 from PIL import Image #To read images in TIFF format
-from saber import get_blur_params #To estimate blur parameters
+from pysaber import get_blur_params #To estimate blur parameters
 
 pix_wid = 0.675 #Width of each pixel in micrometers
 
