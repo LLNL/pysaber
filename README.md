@@ -1,17 +1,17 @@
-#SABER
+# SABER
 
 SABER is a python package for characterizing the X-ray source and detector blur in cone-beam X-ray imaging systems. Note that even parallel beam X-rays in synchrotrons are in fact cone beams albeit with a large source to object distance. X-ray images, also called radiographs, are simultaneously blurred by both the X-ray source spot blur and detector blur. This package uses a numerical optimization algorithm to disentangle and estimate both forms of blur simultaneously.The point spread function (PSF) of X-ray source blur is modeled using an exponential density function with two parameters. The first parameter is the full width half maximum (FWHM) of the PSF along the x-axis (row-wise) and second is the FWHM along the y-axis (column-axis). The PSF of detector blur is modeled as the sum of two exponential density functions, each with its own FWHM parameter, that is mixed together by a mixture (or weighting) parameter. All these parameters are then estimated using numerical optimization from normalized radiographs of a sharp edge such as a thick Tungsten plate rollbar. It is recommended to acquire radiographs of the sharp edge at two different mutually perpendicular orientations and also repeat this process at two different values of the ratio of source to object distance (SOD) and object to detector distance (ODD). Once the parameters of both source and detector blurs are estimated, this package is also useful to reduce blur in radiographs using deblurring algorithms. Currently, Wiener filtering and regularized least squares deconvolution are two deblurring algorithms that are supported for deblurring. Both these techniques use the estimated blur parameters to deblur radiographs. The paper listed in the below reference section contains more information on the theory behind this package package. If you find this package useful, please cite the paper referenced below in your publications.
 
-##References
+## References
 Mohan, K. Aditya, Robert M. Panas, and Jefferson A. Cuadra. "SABER: A Systems Approach to Blur Estimation and Reduction in X-ray Imaging." arXiv preprint arXiv:1905.03935 (2019) [pdf](https://arxiv.org/pdf/1905.03935.pdf)
 
-##License
+## License
 This project is licensed under the MIT License. LLNL-CODE-766837.
 
-##Feedback
+## Feedback
 If you find this package useful, please send your feedback to mohan3[at]llnl[dot]gov. If you prefer, you can also email me at my personal email adityakadri[at]gmail[dot]com. There is a lot of scope to improve the performance and functionality of this python package. So, if there is sufficient interest, I am willing to invest time to significantly reduce the run time, improve usability, and add additional features and functionalities.
 
-##Installation
+## Installation
 SABER is installed using the python package manager pip. To install SABER, first download this package using the download link in the top right corner on this webpage. Alternatively, you can also git clone this package directly from github. In a terminal, change the current directory to the outermost folder of this downloaded package that contains this README and run the following command -
 ```bash
     pip install .
@@ -30,13 +30,13 @@ This python package has two useful functionalities. First, it can extract the PS
 ### Deblur Radiographs
 Once the parameters of source and detector PSFs are estimated, radiographs of any arbitrary sample acquired at any source to object distance (SOD) and source to detector distance (SDD) can be deblurred using various techniques. To deblur a radiograph using Wiener filtering, the function saber.wiener_deblur is used. To deblur using regularized least squares deconvolution (RLSD), use the function saber.least_squares_deblur. The python scripts demo/deblur_wiener.py and demo/deblur_rlsd.py are examples that demonstrate radiograph deblur. 
 
-##Functions
+## Functions
 This section describes the various functions available in this package along with the corresponding input arguments and return values. The information in this section can also be obtained using the python help function. For example, to get help in using the function saber.get_blur_params, run the following lines in python -
 ```python
 from saber import get_blur_params #Import the function get_blur_params
 help(get_blur_params) #To learn more about saber.get_blur_params
 ```
-###Estimate Blur PSFs
+### Estimate Blur PSFs
 get_blur_params(norm_rads, sod, sdd, pix_wid, convg_thresh=1e-06, bdary_mask_perc=5, pad_factor=[3, 3], mask=None, edge_type=None)
     Estimate parameters of point spread functions (PSF) that model X-ray source blur and detector blur from normalized radiographs of a straight sharp edge or two mutually perpendicular sharp edges. 
     
@@ -140,5 +140,5 @@ least_squares_deblur(norm_rad, sod, sdd, pix_wid, src_params, det_params, reg_pa
     Returns:
         numpy.ndarray: Deblurred radiograph using regularized least squares algorithm.
 
-##Contributing
+## Contributing
 TBA
