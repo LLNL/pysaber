@@ -1,1 +1,10 @@
-__pycache__/
+/__pycache__/
+
+# Compiled modules.
+*.pyc
+
+# Setuptools distribution.
+/dist/
+
+# Python egg metadata.
+/*.egg-info

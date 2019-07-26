@@ -1,6 +1,6 @@
 
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from skimage.measure import label,find_contours
 #from PIL import Image
 #from scipy.ndimage.morphology import distance_transform_edt

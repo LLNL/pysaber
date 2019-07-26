@@ -1,11 +1,22 @@
-from setuptools import setup
+import setuptools
 
-setup(name='pysaber',
-      version='0.1',
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(name='pysaber',
+      version='0.1.1',
       description='Python package that implements a systems approach to blur estimation and reduction (SABER)',
-#      url='https://lc.llnl.gov/bitbucket/scm/real/pysaber.git',
+      long_description=long_description,
+      long_description_content_type="text/markdown",
+      url='https://github.com/pysaber/pysaber.git',
       author='K. Aditya Mohan',
       author_email='mohan3@llnl.gov',
       license='MIT',
-      packages=['pysaber'],
-      zip_safe=False)
+      packages=setuptools.find_packages(),
+      install_requires=['numpy','pyyaml','scipy','scikit-image','sklearn','matplotlib'],
+      classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+      ],
+      )
