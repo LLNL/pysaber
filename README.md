@@ -20,7 +20,7 @@ scikit-image
 sklearn
 matplotlib
 ```
-The above python packages will be installed automatically if you follow the procedure outlined in the installation section below. 
+The python packages in the above dependency list will be installed automatically if you follow the procedure outlined in the installation section below. 
 
 ## Installation
 `pysaber` is installed using the python package manager pip.
