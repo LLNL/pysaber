@@ -11,13 +11,15 @@ This project is licensed under the MIT License. LLNL-CODE-766837.
 
 
 ## Dependencies
-`python 3.*`
-`numpy`
-`pyyaml`
-`scipy`
-`scikit-image`
-`sklearn`
-`matplotlib`
+```
+python 3.*
+numpy
+pyyaml
+scipy
+scikit-image
+sklearn
+matplotlib
+```
 The above python packages will be installed automatically if you follow the procedure outlined in the installation section below. 
 
 ## Installation
