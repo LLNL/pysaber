@@ -179,7 +179,7 @@ least_squares_deblur(norm_rad, sod, sdd, pix_wid, src_params, det_params, reg_pa
 ```
 
 ## Authors
-K. Aditya Mohan @aditymnk, Lawrence Livermore National Laboratory, Livermore, CA 
+K. Aditya Mohan @adityamnk
 
 
 ## Bug Reports & Feedback
