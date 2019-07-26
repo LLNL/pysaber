@@ -1,5 +1,5 @@
 import numpy as np
-from saber.models import SourceBlur,DetectorBlur,get_scale,get_FWHM,combine_psfs,convolve_psf
+from pysaber.models import SourceBlur,DetectorBlur,get_scale,get_FWHM,combine_psfs,convolve_psf
 from scipy.signal import fftconvolve
 #from scipy.optimize import minimize_scalar
 from scipy.optimize import minimize
