@@ -13,7 +13,7 @@ setuptools.setup(name='pysaber',
       author_email='mohan3@llnl.gov',
       license='MIT',
       packages=setuptools.find_packages(),
-      install_requires=['numpy','pyyaml','scipy','scikit-image','sklearn','matplotlib'],
+      install_requires=['numpy','pyyaml','scipy','scikit-image','scikit-learn','matplotlib'],
       classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

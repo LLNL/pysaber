@@ -17,7 +17,7 @@ numpy
 pyyaml
 scipy
 scikit-image
-sklearn
+scikit-learn
 matplotlib
 ```
 The python packages in the above dependency list will be installed automatically if you follow the procedure outlined in the installation section below. 
@@ -179,7 +179,13 @@ least_squares_deblur(norm_rad, sod, sdd, pix_wid, src_params, det_params, reg_pa
 ```
 
 ## Authors
-K. Aditya Mohan @adityamnk
+[K. Aditya Mohan](https://github.com/adityamnk)
+
+
+## Acknowledgements
+The following people contributed to the theoretical formulation and experimental validation of SABER -
+Robert M. Panas
+Jefferson A. Cuadra
 
 
 ## Bug Reports & Feedback
