@@ -10,10 +10,6 @@ K. Aditya Mohan, Robert M. Panas, and Jefferson A. Cuadra. "SABER: A Systems App
 This project is licensed under the MIT License. LLNL-CODE-766837.
 
 
-## Bug Reports & Feedback
-This software is under development and may have bugs. If you run into any problems, please raise a issue on github. If you find this package useful, please send your feedback to mohan3[at]llnl[dot]gov. If you prefer, you can also email me at my personal email adityakadri[at]gmail[dot]com. There is a lot of scope to improve the performance and functionality of this python package. So, if there is sufficient interest, I am willing to invest time to significantly reduce the run time, improve usability, and add additional features and functionalities.
-
-
 ## Installation
 SABER is installed using the python package manager pip. To install SABER, first download this package using the download link in the top right corner on this webpage. Alternatively, you can also git clone this package directly from github. In a terminal, change the current directory to the outermost folder of this downloaded package that contains this README and run the following command -
 ```bash
@@ -164,6 +160,13 @@ least_squares_deblur(norm_rad, sod, sdd, pix_wid, src_params, det_params, reg_pa
     Returns:
         numpy.ndarray: Deblurred radiograph using regularized least squares algorithm.
 ```
+
+## Authors
+K. Aditya Mohan @aditymnk, Lawrence Livermore National Laboratory, Livermore, CA 
+
+
+## Bug Reports & Feedback
+This software is under development and may have bugs. If you run into any problems, please raise a issue on github. There is a lot of scope to improve the performance and functionality of this python package. Furthermore, since this package solves a non-convex optimization problem, the final solution may be a local optima and may not properly fit the data. If there is sufficient interest, I will invest time to significantly reduce the run time, improve convergence and usability, and add additional features and functionalities.
 
 
 ## Contributing
