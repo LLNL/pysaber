@@ -1,4 +1,6 @@
-# PySABER
+# PySABER-demo
+Example scripts demonstrating blur estimation and deblurring using the python package `pysaber`.
+
 PySABER is a python package for characterizing the X-ray source and detector blur in cone-beam X-ray imaging systems. SABER is an abbreviation for systems approach to blur estimation and reduction. Note that even parallel beam X-rays in synchrotrons are in fact cone beams albeit with a large source to object distance. X-ray images, also called radiographs, are simultaneously blurred by both the X-ray source spot blur and detector blur. This package uses a numerical optimization algorithm to disentangle and estimate both forms of blur simultaneously.The point spread function (PSF) of X-ray source blur is modeled using an exponential density function with two parameters. The first parameter is the full width half maximum (FWHM) of the PSF along the x-axis (row-wise) and second is the FWHM along the y-axis (column-axis). The PSF of detector blur is modeled as the sum of two exponential density functions, each with its own FWHM parameter, that is mixed together by a mixture (or weighting) parameter. All these parameters are then estimated using numerical optimization from normalized radiographs of a sharp edge such as a thick Tungsten plate rollbar. It is recommended to acquire radiographs of the sharp edge at two different mutually perpendicular orientations and also repeat this process at two different values of the ratio of source to object distance (SOD) and object to detector distance (ODD). Once the parameters of both source and detector blurs are estimated, this package is also useful to reduce blur in radiographs using deblurring algorithms. Currently, Wiener filtering and regularized least squares deconvolution are two deblurring algorithms that are supported for deblurring. Both these techniques use the estimated blur parameters to deblur radiographs. The paper listed in the below reference section contains more information on the theory behind this package package. If you find this package useful, please cite the paper referenced below in your publications.
 
 
@@ -38,14 +40,14 @@ It is recommended to install `pysaber` within a python virtual environment.
 ## Usage
 This python package has two useful functionalities. First, it can extract the PSFs of X-ray source and detector blurs from calibration data consisting of radiographs of a sharp edge. Second, it uses the estimated PSFs to deblur radiograph of any arbitrary sample acquired at any source to object distance (SOD) and source to detector distance (SDD). It is recommended to read the paper in the above reference section before using this python package.
 ### Estimate Blur PSFs
-* The steps involved in estimating blur PSFs are outlined below. The example python script [fit_blur_model.py](https://github.com/sabersw/pysaber-demo/fit_blur_model.py) demonstrates estimation of parameters of blur PSFs from radiographs of a Tungsten sharp edge rollbar.
+* The steps involved in estimating blur PSFs are outlined below. The example python script [fit_blur_model.py](https://github.com/sabersw/pysaber-demo/blob/master/fit_blur_model.py) demonstrates estimation of parameters of blur PSFs from radiographs of a Tungsten sharp edge rollbar.
     * Acquire radiographs of a straight sharp edge such as a Tungsten edge rollbar. Radiographs must be acquired at two different perpendicular orientations and at two different values of SOD/ODD.
     * Normalize each radiograph. For each radiograph, acquire a bright field image (measurements with X-rays but no sample) and a dark field image (measurements without X-rays). Then, compute the normalized radiograph by dividing the difference between the radiograph and the dark field image with the difference between the bright field and the dark field image.
     * Using the normalized radiographs, estimate parameters of X-ray source blur and detector blur using the function `pysaber.get_blur_params`.
-* Next, ensure that the estimated parameters are indeed a good fit for the measured data. This is done by comparing line profiles across the sharp edge between the measured radiograph and the prediction from the blur model output. The output of the blur model given parameters of source and detector blurs is given by the function `pysaber.get_trans_fit`. Carefully zoom into the region where the edge lies and verify if the predicted blur matches with the blur in the measured radiograph. The python scripts [plot_horz_fit.py](https://github.com/sabersw/pysaber-demo/plot_horz_fit.py) and [plot_vert_fit.py](https://github.com/sabersw/pysaber-demo/plot_vert_fit.py) show examples of such comparisons. If the fit is not tight, consider reducing the value of the input argument `convg_thresh` of the function `pysaber.get_blur_params` to obtain a better fit.
-* Lastly, save or visualize the PSF of source and detector blurs. The PSF of source blur is given by the function `pysaber.get_source_psf` and PSF of detector blur is given by `pysaber.get_detector_psf`. The example python scripts [plot_source_psf.py](https://github.com/sabersw/pysaber-demo/plot_source_psf.py) and [plot_detector_psf.py](https://github.com/sabersw/pysaber-demo/plot_detector_psf.py) display source and detector PSFs as images.
+* Next, ensure that the estimated parameters are indeed a good fit for the measured data. This is done by comparing line profiles across the sharp edge between the measured radiograph and the prediction from the blur model output. The output of the blur model given parameters of source and detector blurs is given by the function `pysaber.get_trans_fit`. Carefully zoom into the region where the edge lies and verify if the predicted blur matches with the blur in the measured radiograph. The python scripts [plot_horz_fit.py](https://github.com/sabersw/pysaber-demo/blob/master/plot_horz_fit.py) and [plot_vert_fit.py](https://github.com/sabersw/pysaber-demo/blob/master/plot_vert_fit.py) show examples of such comparisons. If the fit is not tight, consider reducing the value of the input argument `convg_thresh` of the function `pysaber.get_blur_params` to obtain a better fit.
+* Lastly, save or visualize the PSF of source and detector blurs. The PSF of source blur is given by the function `pysaber.get_source_psf` and PSF of detector blur is given by `pysaber.get_detector_psf`. The example python scripts [plot_source_psf.py](https://github.com/sabersw/pysaber-demo/blob/master/plot_source_psf.py) and [plot_detector_psf.py](https://github.com/sabersw/pysaber-demo/blob/master/plot_detector_psf.py) display source and detector PSFs as images.
 ### Deblur Radiographs
-Once the parameters of source and detector PSFs are estimated, radiographs of any arbitrary sample acquired at any source to object distance (SOD) and source to detector distance (SDD) can be deblurred using various techniques. To deblur a radiograph using Wiener filtering, the function `pysaber.wiener_deblur` is used. To deblur using regularized least squares deconvolution (RLSD), use the function `pysaber.least_squares_deblur`. The python scripts [deblur_wiener.py](https://github.com/sabersw/pysaber-demo/deblur_wiener.py) and [deblur_rlsd.py](https://github.com/sabersw/pysaber-demo/deblur_rlsd.py) are examples that demonstrate radiograph deblur. 
+Once the parameters of source and detector PSFs are estimated, radiographs of any arbitrary sample acquired at any source to object distance (SOD) and source to detector distance (SDD) can be deblurred using various techniques. To deblur a radiograph using Wiener filtering, the function `pysaber.wiener_deblur` is used. To deblur using regularized least squares deconvolution (RLSD), use the function `pysaber.least_squares_deblur`. The python scripts [deblur_wiener.py](https://github.com/sabersw/pysaber-demo/blob/master/deblur_wiener.py) and [deblur_rlsd.py](https://github.com/sabersw/pysaber-demo/blob/master/deblur_rlsd.py) are examples that demonstrate radiograph deblur. 
 
 
 ## Functions
@@ -179,13 +181,13 @@ least_squares_deblur(norm_rad, sod, sdd, pix_wid, src_params, det_params, reg_pa
 ```
 
 ## Authors
-[K. Aditya Mohan](https://github.com/adityamnk)
+* [K. Aditya Mohan](https://github.com/adityamnk)
 
 
 ## Acknowledgements
 The following people contributed to the theoretical formulation and experimental validation of SABER -
-Robert M. Panas
-Jefferson A. Cuadra
+* Robert M. Panas
+* Jefferson A. Cuadra
 
 
 ## Bug Reports & Feedback
