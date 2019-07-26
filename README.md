@@ -189,7 +189,7 @@ The following people contributed to the theoretical formulation and experimental
 
 
 ## Bug Reports & Feedback
-This software is under development and may have bugs. If you run into any problems, please raise a issue on github. There is a lot of scope to improve the performance and functionality of this python package. Furthermore, since this package solves a non-convex optimization problem, the final solution may be a local optima and may not properly fit the data. If there is sufficient interest, I will invest time to significantly reduce the run time, improve convergence and usability, and add additional features and functionalities.
+This software is under development and may have bugs. If you run into any problems, please raise a issue on github. There is a lot of scope to improve the performance and functionality of this python package. Furthermore, since this package solves a non-convex optimization problem, there is a remote possibility that the final solution may be a local optima that does not properly fit the data. If there is sufficient interest, I will invest time to significantly reduce the run time, improve convergence and usability, and add additional features and functionalities.
 
 
 ## Contributing
