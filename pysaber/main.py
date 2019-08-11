@@ -177,7 +177,7 @@ def estimate_blur_psfs(norm_rads,trans_models,sod,sdd,pix_wid,src_est=True,det_e
         det_params['detector_FWHM_2'] = 10*pix_wid if det_est else 0.0
         det_params['detector_weight_1'] = 0.9 if det_est else 0.0
         det_params['cutoff_FWHM_1_multiplier'] = 10
-        det_params['cutoff_FWHM_2_multiplier'] = 8
+        det_params['cutoff_FWHM_2_multiplier'] = 10
  
     if trans_bounds is None:
         trans_bounds = []

@@ -1,12 +1,5 @@
-/demo_paper/
-
-/__pycache__/
-
-# Compiled modules.
 *.pyc
-
-# Setuptools distribution.
+__pycache__
+/demo_paper/
 /dist/
-
-# Python egg metadata.
-/*.egg-info
+/*.egg-info/
