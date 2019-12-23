@@ -1,0 +1,12 @@
+horz_edge_25mm.tif:
+  maximum: 0.9719353914260864
+  minimum: 0.021316349506378174
+horz_edge_65mm.tif:
+  maximum: 0.989720031619072
+  minimum: 0.01661720871925354
+vert_edge_25mm.tif:
+  maximum: 0.9816060066223145
+  minimum: 0.020386040210723877
+vert_edge_60mm.tif:
+  maximum: 0.9922980666160583
+  minimum: 0.015438556671142578

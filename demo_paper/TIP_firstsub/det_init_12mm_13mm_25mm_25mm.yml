@@ -1,0 +1,5 @@
+cutoff_FWHM_1_multiplier: 10
+cutoff_FWHM_2_multiplier: 10
+detector_FWHM_1: 5.428909053167472
+detector_FWHM_2: 65.35558527009567
+detector_weight_1: 0.9011454546409847
