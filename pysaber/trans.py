@@ -204,7 +204,7 @@ def ideal_trans_sharp_edge(norm_rad,bdary_mask_perc=5,pad_factor=[2,2],mask=None
 
     return trans_model,params_init,params_bounds 
 
-def ideal_trans_perp_corner(norm_rad,bdary_mask_perc=5,pad_factor=[2,2],mask=None):
+def ideal_trans_perp_corner(norm_rad,bdary_mask_perc=5,pad_factor=[2,2],mask=None,perp_mask_perc=5):
     """Estimate parameters of transmission model for a radiograph with a sharp perpendicular corner.
 
     This function takes as input a normalized radiograph and estimates the ideal transmission image that would have resulted if there was no blur and no noise. This function also pads the transmission image to prevent aliasing during convolution. It also produces masks for the region well within the image edges where blur model estimation is done. The transmission image and masks are packaged into a python dictionary, which is called the transmission model.  
@@ -257,14 +257,14 @@ def ideal_trans_perp_corner(norm_rad,bdary_mask_perc=5,pad_factor=[2,2],mask=Non
         val = np.mean(ideal_trans[np.bitwise_and(ideal_trans>=0.0,reg)])
         ideal_trans[np.bitwise_and(ideal_trans==-1,reg)] = 0.0 if val<0.5 else 1.0
   
-    #perp_mask_perc /= (2*100)
-    #col_inter = (line1_coeff[1]-line2_coeff[1])/(line2_coeff[0]-line1_coeff[0])
-    #row_inter = line1_coeff[0]*col_inter+line1_coeff[1]
-    #circmask = (colidx-col_inter)**2+(rowidx-row_inter)**2<=(perp_mask_perc*max(norm_rad.shape))**2
-    #ideal_trans_mask[circmask] = False   
-    #colidx,rowidx = np.meshgrid(np.arange(0,norm_rad.shape[1]),np.arange(0,norm_rad.shape[0]))
-    #circmask = (colidx-col_inter)**2+(rowidx-row_inter)**2<=(perp_mask_perc*max(norm_rad.shape))**2
-    #norm_rad_mask[circmask] = False
+    perp_mask_perc /= (2*100)
+    col_inter = (line1_coeff[1]-line2_coeff[1])/(line2_coeff[0]-line1_coeff[0])
+    row_inter = line1_coeff[0]*col_inter+line1_coeff[1]
+    circmask = (colidx-col_inter)**2+(rowidx-row_inter)**2<=(perp_mask_perc*max(norm_rad.shape))**2
+    ideal_trans_mask[circmask] = False   
+    colidx,rowidx = np.meshgrid(np.arange(0,norm_rad.shape[1]),np.arange(0,norm_rad.shape[0]))
+    circmask = (colidx-col_inter)**2+(rowidx-row_inter)**2<=(perp_mask_perc*max(norm_rad.shape))**2
+    norm_rad_mask[circmask] = False
 
     if(np.any(np.isnan(ideal_trans))):
         raise ValueError("ERROR: Nan detected in the ideal radiograph image")

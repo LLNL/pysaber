@@ -1,12 +1,13 @@
 import time
 import numpy as np
 import yaml
-from pysaber.trans import ideal_trans_sharp_edge
+from pysaber.trans import ideal_trans_sharp_edge,ideal_trans_perp_corner
 from pysaber.models import SourceBlur,DetectorBlur,Transmission,get_scale,get_FWHM,combine_psfs,convolve_psf
 from pysaber.optim import error_function,jacobian_function,set_model_params
 from scipy.optimize import minimize#,check_grad,approx_fprime
+import matplotlib.pyplot as plt
 
-def get_blur_params(norm_rads,sod,sdd,pix_wid,convg_thresh=1e-6,bdary_mask_perc=5,pad_factor=[3,3],mask=None,edge_type=None):
+def get_blur_params(norm_rads,sod,sdd,pix_wid,convg_thresh=1e-6,pad_factor=[3,3],mask=None,edge_type=None,bdary_mask_perc=5,perp_mask_perc=5):
     """
         Estimate parameters of point spread functions (PSF) that model X-ray source blur and detector blur from normalized radiographs of a straight sharp edge or two mutually perpendicular sharp edges. 
 
@@ -32,7 +33,7 @@ def get_blur_params(norm_rads,sod,sdd,pix_wid,convg_thresh=1e-6,bdary_mask_perc=
     trans_models,trans_params,trans_bounds = [],[],[]
     for j in range(len(norm_rads)):
         if edge_type == 'perpendicular':
-            trans_dict,params,bounds = ideal_trans_perp_corner(norm_rads[j],bdary_mask_perc=bdary_mask_perc,pad_factor=pad_factor,mask=mask)
+            trans_dict,params,bounds = ideal_trans_perp_corner(norm_rads[j],bdary_mask_perc=bdary_mask_perc,pad_factor=pad_factor,mask=mask,perp_mask_perc=perp_mask_perc)
         else:
             trans_dict,params,bounds = ideal_trans_sharp_edge(norm_rads[j],bdary_mask_perc=bdary_mask_perc,pad_factor=pad_factor,mask=mask)
             
@@ -41,7 +42,10 @@ def get_blur_params(norm_rads,sod,sdd,pix_wid,convg_thresh=1e-6,bdary_mask_perc=
         #Add trans_dict to list trans_models 
         trans_params.append(params)
         trans_bounds.append(bounds)
-            
+
+        plt.imshow(norm_rads[j]+trans_dict['norm_rad_mask'].astype(float))                  
+        plt.show()
+ 
         #print("Initial estimates of transmission parameters for radiograph {} are {}.".format(j,params))
         #print("{:.2e} mins has elapsed.".format((time.time()-start_time)/60.0))
 
