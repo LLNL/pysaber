@@ -8,5 +8,4 @@ Documentation for PySABER coming soon!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
