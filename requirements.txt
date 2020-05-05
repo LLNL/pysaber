@@ -1,0 +1,6 @@
+numpy
+pyyaml
+scipy
+scikit-image
+scikit-learn
+matplotlib

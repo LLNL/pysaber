@@ -1,5 +1,5 @@
 import numpy as np
-from pysaber.models import SourceBlur,DetectorBlur,get_scale,get_FWHM,combine_psfs,convolve_psf
+from pysaber.modelssr import SourceBlur,DetectorBlur,get_scale,get_FWHM,combine_psfs,convolve_psf
 from scipy.signal import fftconvolve
 #from scipy.optimize import minimize_scalar
 from scipy.optimize import minimize
@@ -148,31 +148,32 @@ def LineSearchCost(x,forw_weights,forw_off,forw_slope,prior_weights,prior_regpar
         prior_cost = prior_regparam*np.sum(prior_weights*(np.fabs(prior_cost)**1.2))
     return (forw_cost+prior_cost)
 
-def least_squares_deblur(norm_rad,sod,sdd,pix_wid,src_params,det_params,reg_param,init_rad=None,weights=None,convg_thresh=1e-4):
+def least_squares_deblur(rad,sod,odd,pix_wid,src_pars,det_pars,reg_par,init_rad=None,weights=None,thresh=1e-4):
     """
     Function to reduce blur (deblur) in radiographs using a regularized least squares iterative algorithm.     
 
     Parameters:
-        norm_rad (numpy.ndarray): Normalized radiograph to deblur
+        rad (numpy.ndarray): Normalized radiograph to deblur
         sod (float): Source to object distance (SOD) of the radiograph
-        sdd (float): Source to detector distance (SDD) of the radiograph
+        odd (float): Object to detector distance (ODD) of the radiograph
         pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
-        src_params (dict): Estimated parameters of X-ray source PSF. It should consist of several key-value pairs. The value for key source_FWHM_x_axis is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second array dimension). The value for key source_FWHM_y_axis is the FWHM of source PSF along the y-axis (i.e., first array dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the detector plane). The value for key cutoff_FWHM_multiplier decides the non-zero spatial extent of the source blur PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of cutoff_FWHM_multiplier times half the maximum FWHM (maximum of source_FWHM_x_axis and source_FWHM_y_axis).
-        det_params (dict): Estimated parameters of detector blur PSF. It should consist of several key-value pairs. The value for key detector_FWHM_1 is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key detector_FWHM_2 is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's point spread function (PSF). The value for key detector_weight_1 is between 0 and 1 and is an approximate measure of the amount of contribution of the first exponential to the detector blur. The values for keys cutoff_FWHM_1_multiplier and cutoff_FWHM_2_multiplier decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of cutoff_FWHM_1_multiplier*detector_FWHM_1/2 and cutoff_FWHM_2_multiplier*detector_FWHM_2/2.
-        reg_param (float): Regularization parameter for the least squares deblurring algorithm. Noise and ringing artifacts in the deblurred radiograph decreases with increasing values for reg_param and vice versa. But, note that increasing reg_param can also result in excessive blurring due to over-regulization. It is recommended to empirically choose this parameter by increasing or decreasing it by a factor, greater than one (such as 2 or 10), until the desired image quality is achieved.
+        src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the exponential PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of ``src_pars['cutoff_FWHM_multiplier']`` times half the maximum FWHM (maximum of ``src_pars['source_FWHM_x_axis']`` and ``src_pars['source_FWHM_y_axis']``). 
+        det_pars (dict): Dictionary containing estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between 0 and 1 and is a measure of the amount of contribution of the first exponential to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of ``det_pars['cutoff_FWHM_1_multiplier']*det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']*det_pars['detector_FWHM_2']/2``. 
+        reg_par (float): Regularization parameter for the least squares deblurring algorithm. Noise and ringing artifacts in the deblurred radiograph decreases with increasing values for ``reg_par`` and vice versa. But, note that increasing ``reg_par`` can also result in excessive blurring due to over-regulization. It is recommended to empirically choose this parameter by increasing or decreasing it by a factor, greater than one (such as 2 or 10), until the desired image quality is achieved.
         init_rad (numpy.ndarray): Initial estimate for the deblurred radiograph. If set to None, then the blurred radiograph is used as an initial estimate. If not None, then init_rad must be a numpy.ndarray of the same shape as norm_rad. 
         weights (numpy.ndarray): Used to increase or decrease reliance on a particular pixel of norm_rad in the forward model cost function. If set to None, every pixel is assigned the same weight of 1.
-        convg_thresh (float): Convergence threshold for the minimizer used to deblur the input radiograph. The iterations stop when the ratio of the reduction in the error function (cost value) and the magnitude of the error function is lower than convg_thresh. This is the parameter ftol that is specified in the options parameter of scipy.optimize.minimize. The optimizer used is L-BFGS-B.
+        thresh (float): Convergence threshold for the minimizer used to deblur the input radiograph. The iterations stop when the ratio of the reduction in the error function (cost value) and the magnitude of the error function is lower than convg_thresh. This is the parameter ftol that is specified in the options parameter of scipy.optimize.minimize. The optimizer used is L-BFGS-B.
     
     Returns:
         numpy.ndarray: Deblurred radiograph using regularized least squares algorithm. 
     """
+    norm_rad = rad
     max_wid = pix_wid*min(norm_rad.shape)/2
     if weights is None:
         weights = 1.0
     
-    src_mod = SourceBlur(pix_wid,max_wid,sod,sdd-sod,src_params['cutoff_FWHM_multiplier'],param_x=get_scale(src_params['source_FWHM_x_axis']),param_y=get_scale(src_params['source_FWHM_y_axis']))
-    det_mod = DetectorBlur(pix_wid,max_wid,det_params['cutoff_FWHM_1_multiplier'],det_params['cutoff_FWHM_2_multiplier'],param_1=get_scale(det_params['detector_FWHM_1']),param_2=get_scale(det_params['detector_FWHM_2']),weight_1=det_params['detector_weight_1']) 
+    src_mod = SourceBlur(pix_wid,max_wid,sod,odd,src_pars['cutoff_FWHM_multiplier'],param_x=get_scale(src_pars['source_FWHM_x_axis'],src_pars['norm_power']),param_y=get_scale(src_pars['source_FWHM_y_axis'],src_pars['norm_power']),param_type='scale',norm_pow=src_pars['norm_power'])
+    det_mod = DetectorBlur(pix_wid,max_wid,det_pars['cutoff_FWHM_1_multiplier'],det_pars['cutoff_FWHM_2_multiplier'],param_1=get_scale(det_pars['detector_FWHM_1'],det_pars['norm_power']),param_2=get_scale(det_pars['detector_FWHM_2'],det_pars['norm_power']),weight_1=det_pars['detector_weight_1'],param_type='scale',norm_pow=det_pars['norm_power']) 
         
     blur_psf = combine_psfs(src_mod.get_psf(),det_mod.get_psf(),are_psf=True)
     
@@ -209,48 +210,48 @@ def least_squares_deblur(norm_rad,sod,sdd,pix_wid,src_params,det_params,reg_para
         pred = (norm_rad-pred)*weights
         grad = -convolve_psf(np.pad(pred,padw,'edge'),blur_psf,padw,is_psf=True,warn=False)[padw[0]:-padw[0],padw[1]:-padw[1]]
         #grad = grad/rad_size+computePriorGradient(x,prior_weights,reg_param)/prior_size
-        grad = grad+computePriorGradient(x,prior_weights,reg_param)
+        grad = grad+computePriorGradient(x,prior_weights,reg_par)
         return grad.ravel()
 
     def cost_func(x): 
         x = x.reshape(rad_shape) 
-        prior_cost,_ = computePriorCost(x,prior_weights,reg_param)
+        prior_cost,_ = computePriorCost(x,prior_weights,reg_par)
         #cost = forw_cost_func(x)+prior_cost/prior_size
         forw_cost = forw_cost_func(x)
         cost = forw_cost+prior_cost
         print("Cost is {}={}+{}".format(cost,forw_cost,prior_cost))
         return cost 
 
-    res = minimize(cost_func,deblurred_rad.ravel(),method='L-BFGS-B',jac=gradient_func,options={'disp':True,'ftol':convg_thresh})
+    res = minimize(cost_func,deblurred_rad.ravel(),method='L-BFGS-B',jac=gradient_func,options={'disp':True,'ftol':thresh})
     return res.x.reshape(rad_shape)
 
-def wiener_deblur(norm_rad,sod,sdd,pix_wid,src_params,det_params,reg_param):
+def wiener_deblur(rad,sod,odd,pix_wid,src_pars,det_pars,reg_par):
     """
     Function to reduce blur (deblur) in a radiograph using Wiener filtering.     
 
-    Parameters:
-        norm_rad (numpy.ndarray): Normalized radiograph to deblur
-        sod (float): Source to object distance (SOD) of the radiograph
-        sdd (float): Source to detector distance (SDD) of the radiograph
+    Args:
+        rad (numpy.ndarray): Normalized radiograph to deblur
+        sod (float): Source to object distance (SOD) for the radiograph :attr:`rad`.
+        odd (float): Object to detector distance (SDD) for the radiograph :attr:`rad`.
         pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
-        src_params (dict): Estimated parameters of X-ray source PSF. It should consist of several key-value pairs. The value for key source_FWHM_x_axis is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second array dimension). The value for key source_FWHM_y_axis is the FWHM of source PSF along the y-axis (i.e., first array dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the detector plane). The value for key cutoff_FWHM_multiplier decides the non-zero spatial extent of the source blur PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of cutoff_FWHM_multiplier times half the maximum FWHM (maximum of source_FWHM_x_axis and source_FWHM_y_axis).
-        det_params (dict): Estimated parameters of detector blur PSF. It should consist of several key-value pairs. The value for key detector_FWHM_1 is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key detector_FWHM_2 is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's point spread function (PSF). The value for key detector_weight_1 is between 0 and 1 and is an approximate measure of the amount of contribution of the first exponential to the detector blur. The values for keys cutoff_FWHM_1_multiplier and cutoff_FWHM_2_multiplier decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of cutoff_FWHM_1_multiplier*detector_FWHM_1/2 and cutoff_FWHM_2_multiplier*detector_FWHM_2/2.
-        reg_param (float): Regularization parameter for Wiener filtering deblurring algorithm. Noise and ringing artifacts in the deblurred radiograph decreases with increasing values for reg_param and vice versa. But, note that increasing reg_param can also result in excessive blurring due to over-regulization. It is recommended to empirically choose this parameter by increasing or decreasing it by a factor, greater than one (such as 2 or 10), until the desired image quality is achieved.
+        src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the exponential PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of ``src_pars['cutoff_FWHM_multiplier']`` times half the maximum FWHM (maximum of ``src_pars['source_FWHM_x_axis']`` and ``src_pars['source_FWHM_y_axis']``). 
+        det_pars (dict): Dictionary containing estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between 0 and 1 and is a measure of the amount of contribution of the first exponential to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of ``det_pars['cutoff_FWHM_1_multiplier']*det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']*det_pars['detector_FWHM_2']/2``. 
+        reg_par (float): Regularization parameter for Wiener filtering deblurring algorithm. Noise and ringing artifacts in the deblurred radiograph decreases with increasing values for ``reg_par`` and vice versa. But, note that increasing ``reg_par`` can also result in excessive blurring due to over-regulization. It is recommended to empirically choose this parameter by increasing or decreasing it by a factor, greater than one (such as 2 or 10), until the desired image quality is achieved.
     
     Returns:
         numpy.ndarray: Deblurred radiograph using a Wiener filter. 
     """
 
-    max_wid = pix_wid*min(norm_rad.shape)/2
+    max_wid = pix_wid*min(rad.shape)/2
     
-    src_mod = SourceBlur(pix_wid,max_wid,sod,sdd-sod,src_params['cutoff_FWHM_multiplier'],param_x=get_scale(src_params['source_FWHM_x_axis']),param_y=get_scale(src_params['source_FWHM_y_axis']))
-    det_mod = DetectorBlur(pix_wid,max_wid,det_params['cutoff_FWHM_1_multiplier'],det_params['cutoff_FWHM_2_multiplier'],param_1=get_scale(det_params['detector_FWHM_1']),param_2=get_scale(det_params['detector_FWHM_2']),weight_1=det_params['detector_weight_1']) 
+    src_mod = SourceBlur(pix_wid,max_wid,sod,odd,src_pars['cutoff_FWHM_multiplier'],param_x=get_scale(src_pars['source_FWHM_x_axis'],src_pars['norm_power']),param_y=get_scale(src_pars['source_FWHM_y_axis'],src_pars['norm_power']),param_type='scale',norm_pow=src_pars['norm_power'])
+    det_mod = DetectorBlur(pix_wid,max_wid,det_pars['cutoff_FWHM_1_multiplier'],det_pars['cutoff_FWHM_2_multiplier'],param_1=get_scale(det_pars['detector_FWHM_1'],src_pars['norm_power']),param_2=get_scale(det_pars['detector_FWHM_2'],src_pars['norm_power']),weight_1=det_pars['detector_weight_1'],param_type='scale',norm_pow=det_pars['norm_power']) 
         
-    blur_psf = combine_psfs(src_mod.get_psf(),det_mod.get_psf(),are_psf=True)
+    blur_psf = combine_psfs(src_mod.get_psf(),det_mod.get_psf(mix_det=(det_pars['detector_weight_1']!=1)),are_psf=True)
     
     padw = np.array(blur_psf.shape)//2-1
-    norm_rad_pad = np.pad(norm_rad,padw,'edge')
-    deblur_rad = wiener(norm_rad_pad,blur_psf,float(reg_param),clip=False)
+    norm_rad_pad = np.pad(rad,padw,'edge')
+    deblur_rad = wiener(norm_rad_pad,blur_psf,float(reg_par),clip=False)
     return deblur_rad.astype(float)[padw[0]:-padw[0],padw[1]:-padw[1]]
 
 """

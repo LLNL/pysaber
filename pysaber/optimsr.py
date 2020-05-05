@@ -1,7 +1,7 @@
 import numpy as np
-from pysaber.models import combine_psfs,convolve_psf
+from pysaber.modelssr import combine_psfs,convolve_psf
  
-def set_model_params(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est):
+def set_model_params(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,mix_det):
     """
     Set parameters of blur and transmission models.
 
@@ -23,13 +23,14 @@ def set_model_params(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_
             model.set_params(scale_axis_x,scale_axis_y)
 
     if det_est:
-        det_mod.set_params(args.pop(),args.pop(),args.pop())
+        pars = [args.pop(),args.pop(),args.pop()] if mix_det else [args.pop(),None,None]
+        det_mod.set_params(*pars)
 
     if trans_est:
         for model in trans_mods:
             model.set_params([args.pop() for _ in range(model.len_params)])
 
-def jacobian_function(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,norm_rads,pix_wid):
+def jacobian_function(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,norm_rads,pix_wid,mix_det):
     """
     Compute the Jacobian (derivates) of cost function
 
@@ -49,18 +50,18 @@ def jacobian_function(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans
     """
     args_var = args_var.tolist()
     #print("Evaluating gradient for parameters {}".format(args_var))
-    set_model_params(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est)
+    set_model_params(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,mix_det)
    
     if src_est: 
         src_grad = [0,0]
     if det_est:
-        det_grad = [0,0,0]
+        det_grad = [0,0,0] if mix_det else [0]
     if trans_est:
         trans_grad = []
 
-    det_psf = det_mod.get_psf()
+    det_psf = det_mod.get_psf(mix_det=mix_det)
     if det_est:
-        det_gradpsf = det_mod.get_grad_psfs()
+        det_gradpsf = det_mod.get_grad_psfs(mix_det=mix_det)
 
     for j in range(len(norm_rads)):
         rad = norm_rads[j]
@@ -103,7 +104,7 @@ def jacobian_function(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans
 #    print("Gradient is ", grad)
     return grad    
 
-def error_function(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,norm_rads,pix_wid):
+def error_function(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,norm_rads,pix_wid,mix_det):
     """
     Compute error function (also called cost) that measures the magnitude of the difference between the measured radiograph values and its prediction using the blur model.
 
@@ -123,10 +124,10 @@ def error_function(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_es
     """
     args_var = args_var.tolist()
     print("Evaluating fit for parameters {}".format(args_var))
-    set_model_params(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est)
+    set_model_params(args_var,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,mix_det)
     
     error = 0
-    dmod_psf = det_mod.get_psf()
+    dmod_psf = det_mod.get_psf(mix_det=mix_det)
     for j in range(len(norm_rads)):
         rad = norm_rads[j]
         radm,tran,tranm = trans_mods[j].get_trans()

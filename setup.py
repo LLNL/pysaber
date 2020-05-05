@@ -1,10 +1,13 @@
 import setuptools
 
+with open('VERSION','r') as fh:
+    version = fh.read().strip()
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(name='pysaber',
-      version='0.1.5',
+      version=version,
       description='Python package that implements a systems approach to blur estimation and reduction (SABER)',
       long_description=long_description,
       long_description_content_type="text/markdown",
