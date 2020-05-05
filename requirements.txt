@@ -5,3 +5,4 @@ scikit-image
 scikit-learn
 matplotlib
 sphinxcontrib-napoleon
+sphinx-automodapi
