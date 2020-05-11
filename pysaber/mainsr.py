@@ -430,12 +430,12 @@ def get_trans_fit(rad,sod,odd,pix_wid,src_pars,det_pars,trans_pars,pad=[3,3],edg
             pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
             src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the exponential PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of ``src_pars['cutoff_FWHM_multiplier']`` times half the maximum FWHM (maximum of ``src_pars['source_FWHM_x_axis']`` and ``src_pars['source_FWHM_y_axis']``). 
             det_pars (dict): Dictionary containing estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between 0 and 1 and is a measure of the amount of contribution of the first exponential to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of ``det_pars['cutoff_FWHM_1_multiplier']*det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']*det_pars['detector_FWHM_2']/2``. 
-            tran_pars (list): ``tran_pars`` contains estimated parameters of the transmission function for each input radiograph. This return value is a list of lists, where each inner nested list consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. The number of nested lists in the returned list equals the number of input radiographs. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise.
+            tran_pars (list): ``tran_pars`` contains estimated parameters of the transmission function for the input radiograph. It consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise. If not specified (or specified as None), then the best fitting transmission function parameters are estimated using RANSAC regression.
             pad (list): Pad factor is a list of two integers that determine the amount of padding that must be applied to the radiographs to reduce aliasing during convolution. The number of rows/columns after padding is equal to :attr:`pad_factor[0]`/:attr:`pad_factor[1]` times the number of rows/columns in each radiograph before padding. For example, if the first element in :attr:`pad_factor` is 2, then the radiograph is padded to twice its size along the first dimension. 
             edge (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If :attr:`edge` is ``perpendicular``, then each radiograph is assumed to have two mutually perpendicular edges. If it is ``straight-edge``, then each radiograph is assumed to have a single straight edge. Only ``perpendicular`` and ``straight-edge`` are legal choices for :attr:`edge`.
 
         Returns:
-            tuple: Tuple of two arrays of type ``numpy.ndarray``. The first array is blurred radiograph as predicted by the blur model. The second array is ideal transmission function, which is the ideal readiograph in the absence of source and detector blur.  
+            tuple: Tuple of two arrays of type ``numpy.ndarray``. The first array is blurred radiograph as predicted by the blur model. The second array is transmission function, which is the ideal readiograph in the absence of source and detector blur.  
     """
     if edge == 'perpendicular':
         trans_dict,params,bounds = ideal_trans_perp_corner(rad,pad_factor=pad)
@@ -445,14 +445,14 @@ def get_trans_fit(rad,sod,odd,pix_wid,src_pars,det_pars,trans_pars,pad=[3,3],edg
         raise ValueError('Argument edge must be either perpendicular or straight-edge')        
         
     trans_mod = Transmission(trans_dict,trans_pars)
-    _,ideal_trans,_ = trans_mod.get_trans()
-    pad_widths = (np.array(ideal_trans.shape)-np.array(rad.shape))//2 #assumes symmetric padding
-    pred_rad = apply_blur_psfs(ideal_trans,sod,odd,pix_wid,src_pars,det_pars,padded_widths=pad_widths)
+    _,trans,_ = trans_mod.get_trans()
+    pad_widths = (np.array(trans.shape)-np.array(rad.shape))//2 #assumes symmetric padding
+    pred_rad = apply_blur_psfs(trans,sod,odd,pix_wid,src_pars,det_pars,padded_widths=pad_widths)
     pred_rad = pred_rad[pad_widths[0]:-pad_widths[0],pad_widths[1]:-pad_widths[1]]
-    ideal_trans = ideal_trans[pad_widths[0]:-pad_widths[0],pad_widths[1]:-pad_widths[1]] 
-    return pred_rad,ideal_trans
+    trans = trans[pad_widths[0]:-pad_widths[0],pad_widths[1]:-pad_widths[1]] 
+    return pred_rad,trans
 
-def get_trans_masks(rad,trans_pars=None,edge=None):
+def get_trans_masks(rad,trans_pars=None,pad=[1,1],mask=None,edge=None,bdary_mask=5.0,perp_mask=5.0):
     """
         Function to compute ideal transmission function and mask for a radiograph with a single straight edge or two mutually perpendicular edges. 
 
@@ -460,23 +460,29 @@ def get_trans_masks(rad,trans_pars=None,edge=None):
         
         Parameters:
             rad (numpy.ndarray): Normalized radiograph of a straight sharp edge or two mutually perpendicular edges.
-            tran_pars (list): ``tran_pars`` contains estimated parameters of the transmission function for each input radiograph. This return value is a list of lists, where each inner nested list consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. The number of nested lists in the returned list equals the number of input radiographs. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise.
+            tran_pars (list): ``tran_pars`` contains estimated parameters of the transmission function for the input radiograph. It consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise. If not specified (or specified as None), then the best fitting transmission function parameters are estimated using RANSAC regression.
+            pad (list): Pad factor is a list of two integers that determine the amount of padding that must be applied to the radiographs to reduce aliasing during convolution. The number of rows/columns after padding is equal to :attr:`pad_factor[0]`/:attr:`pad_factor[1]` times the number of rows/columns in each radiograph before padding. For example, if the first element in :attr:`pad_factor` is 2, then the radiograph is padded to twice its size along the first dimension. 
+            mask (numpy.ndarray): Boolean mask of the same shape as the radiograph that is used to exclude pixels from blur estimation. An example use case is if some pixels in the radiographs are bad, then those pixels can be excluded from blur estimation by setting the corresponding entries in mask to false and true otherwise.
             edge (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If :attr:`edge` is ``perpendicular``, then each radiograph is assumed to have two mutually perpendicular edges. If it is ``straight-edge``, then each radiograph is assumed to have a single straight edge. Only ``perpendicular`` and ``straight-edge`` are legal choices for :attr:`edge`.
+            bdary_mask (float): Percentage of image region in the radiographs as measured from the outer edge going inwards that must be excluded from blur estimation. Pixels are excluded (or masked) beginning from the outermost periphery of the image and working inwards until the specified percentage of pixels is reached.
+            perp_mask (float): Percentage of circular region to ignore during blur estimation around the intersecting corner of two perpendicular edges. Ignored if :attr:`edge` is ``straight-edge``.
 
         Returns:
-            tuple: Tuple of two arrays of type ``numpy.ndarray``. The first array is the ideal transmission function, which is the ideal readiograph in the absence of source and detector blur. The second array is the mask, which indicates what pixels must be included (pixel value of ``True``) or excluded (pixel value of ``False`` during blur estimation.  
+            tuple: Tuple of three arrays of type ``numpy.ndarray``. The first array is the ideal transmission function, which is the ideal readiograph in the absence of source and detector blur. The second and third arrays are the masks for the transmission function and radiograph respectively. The mask array indicates what pixels must be included (pixel value of ``True``) or excluded (pixel value of ``False``) during blur estimation.  
     """
  
     if edge == 'perpendicular':
-        trans_dict,init_params,bounds = ideal_trans_perp_corner(rad,pad_factor=[1,1])
+        trans_dict,init_params,bounds = ideal_trans_perp_corner(rad,bdary_mask_perc=bdary_mask,pad_factor=pad,mask=mask,perp_mask_perc=perp_mask)
+    elif edge == 'straight-edge':
+        trans_dict,init_params,bounds = ideal_trans_sharp_edge(rad,bdary_mask_perc=bdary_mask,pad_factor=pad,mask=mask)
     else:
-        trans_dict,init_params,bounds = ideal_trans_sharp_edge(rad,pad_factor=[1,1])
+        raise ValueError('Argument edge must be either perpendicular or straight-edge')        
 
     if trans_pars is None:
         trans_mod = Transmission(trans_dict,init_params)
     else:
-        trans_mod = Transmission(trans_dict,trans_params)
+        trans_mod = Transmission(trans_dict,trans_pars)
         
     rmask,trans,tmask = trans_mod.get_trans()
-    assert np.all(rmask==tmask)
-    return trans,tmask 
+    #assert np.all(rmask==tmask)
+    return trans,tmask,rmask 

@@ -469,7 +469,7 @@ class DetectorBlur(Blur):
  
         cutoff_width = max(self.cutoff_FWHM_1*self.FWHM_1,self.cutoff_FWHM_2*self.FWHM_2)/2.0
         if cutoff_width>self.max_width and self.warn:
-            print("CRITICAL WARNING: The maximum width {} specified for detector PSF is less than the cutoff width {}".format(self.max_width,cutoff_width))
+            print("WARN: The maximum width {} specified for detector PSF is less than the cutoff width {}".format(self.max_width,cutoff_width))
         cutoff_width = min(cutoff_width,self.max_width)
 
         psf_func = self.psf_function() 

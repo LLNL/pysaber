@@ -42,6 +42,7 @@ mid = (pred_nrad.shape[0]//2,pred_nrad.shape[1]//2)
 plt.plot(coords,nrad[:,sz[1]//2])
 #Due to padding, pred_nrad is three times the size of nrad in each dimension
 #For proper alignment in presence of padding, both nrad and pred_nrad are center aligned
+#Center alignment is used since an equal amount of padding is applied at both ends of each axis
 plt.plot(coords,pred_nrad[mid[0]-(sz[0]//2):mid[0]+(sz[0]//2),mid[1]])
 plt.xlabel('micrometers')
 plt.legend(['Measured','Prediction'])

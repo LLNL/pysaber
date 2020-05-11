@@ -1,0 +1,436 @@
+***********************
+Rad Std is 0.0060169732314534485
+***********************
+-------------------------------------------
+smpl_mean [0.98081381 0.98095106 0.01188817 0.01116444]
+Final Std is 0.0029698021336940312 < 0.003 at reg of 2.726420685613275
+-------------------------------------------
+***********************
+Rad Std is 0.006018117535859346
+***********************
+-------------------------------------------
+smpl_mean [0.01280488 0.98805486 0.01215823 0.99026793]
+Final Std is 0.0029773879018494508 < 0.003 at reg of 2.4785642596484316
+-------------------------------------------
+***********************
+Rad Std is 0.005919428076595068
+***********************
+-------------------------------------------
+smpl_mean [0.99554257 0.99609675 0.01016092 0.00966174]
+Final Std is 0.00299048497230019 < 0.003 at reg of 1.5389933993880391
+-------------------------------------------
+***********************
+Rad Std is 0.005925687728449702
+***********************
+-------------------------------------------
+smpl_mean [0.0091288  0.99873854 0.00843511 0.99974811]
+Final Std is 0.002986623449647454 < 0.003 at reg of 1.5389933993880391
+-------------------------------------------
+***********************
+Rad Std is 0.0060169732314534485
+***********************
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+-------------------------------------------
+smpl_mean [0.98066628 0.98077228 0.01209059 0.01134306]
+Final Std is 0.002987862025543971 < 0.003 at reg of 3.6288659325512698
+-------------------------------------------
+***********************
+Rad Std is 0.006018117535859346
+***********************
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+-------------------------------------------
+smpl_mean [0.01294345 0.98783632 0.01235342 0.99008358]
+Final Std is 0.0029957653486718068 < 0.003 at reg of 3.298969029592063
+-------------------------------------------
+***********************
+Rad Std is 0.005919428076595068
+***********************
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+-------------------------------------------
+smpl_mean [0.9953584  0.99588529 0.01035403 0.00982125]
+Final Std is 0.0029953982442897337 < 0.003 at reg of 2.0484002145854805
+-------------------------------------------
+***********************
+Rad Std is 0.005925687728449702
+***********************
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+WARN: The maximum width 673.6500000000001 specified for detector PSF is less than the cutoff width 1909.2943058882515
+-------------------------------------------
+smpl_mean [0.0092778  0.99852724 0.00864018 0.99957901]
+Final Std is 0.0029790270563140753 < 0.003 at reg of 2.0484002145854805
+-------------------------------------------
+***********************
+Rad Std is 0.0060169732314534485
+***********************
+***********************
+Rad Std is 0.006018117535859346
+***********************
+***********************
+Rad Std is 0.005919428076595068
+***********************
+***********************
+Rad Std is 0.005925687728449702
+***********************
+-------------------------------------------
+smpl_mean [0.00947037 0.99801981 0.00902217 0.99932945]
+Final Std is 0.002999708185297747 < 0.003 at reg of 0.7897469567994442
+-------------------------------------------
+***********************
+Rad Std is 0.0060169732314534485
+***********************
+-------------------------------------------
+smpl_mean [0.98053679 0.98051205 0.01249423 0.01159708]
+Final Std is 0.00295331816833053 < 0.003 at reg of 29.539966406591216
+-------------------------------------------
+***********************
+Rad Std is 0.006018117535859346
+***********************
+-------------------------------------------
+smpl_mean [0.01302243 0.9874311  0.01262039 0.98999747]
+Final Std is 0.0029675503521420787 < 0.003 at reg of 26.85451491508292
+-------------------------------------------
+***********************
+Rad Std is 0.005919428076595068
+***********************
+-------------------------------------------
+smpl_mean [0.99519795 0.99554895 0.01059626 0.00995514]
+Final Std is 0.002988557035303073 < 0.003 at reg of 0.33492980349556173
+-------------------------------------------
+***********************
+Rad Std is 0.005925687728449702
+***********************
+-------------------------------------------
+smpl_mean [0.00939082 0.99809921 0.00894238 0.99940941]
+Final Std is 0.0029875558389020626 < 0.003 at reg of 0.44579156845259277
+-------------------------------------------
+6.87e+01 mins has elapsed

@@ -32,7 +32,7 @@ det_params = {'detector_FWHM_1':1.85,
                 'cutoff_FWHM_2_multiplier':10}
 
 #Deblur the artifact using regularized least squares deconvolution
-rlsd_rad = least_squares_deblur(norm_rad,sod,sdd,pix_wid,src_params,det_params,reg_param,thresh=1e-3)
+rlsd_rad = least_squares_deblur(norm_rad,sod,sdd,pix_wid,src_params,det_params,reg_param,thresh=2e-4)
 
 #Display deblurred radiograph of artifact
 mag = (sdd-sod)/sod
