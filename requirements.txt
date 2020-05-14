@@ -1,4 +1,4 @@
-pysaber=1.*
+pysaber==1.*
 numpy
 pyyaml
 scipy
