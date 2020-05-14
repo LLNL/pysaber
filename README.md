@@ -20,7 +20,7 @@ Please refer to the documentation at the link [https://pysaber.readthedocs.io/](
  
 
 ## Contributors
-* [K. Aditya Mohan](https://github.com/adityamnk)
+* [K. Aditya Mohan](https://orcid.org/0000-0002-0921-6559)
 * Robert M. Panas
 * Jefferson A. Cuadra
 
