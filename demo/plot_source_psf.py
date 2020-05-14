@@ -13,7 +13,7 @@ src_params = {'source_FWHM_x_axis':2.69,
 #Do not supply SOD and SDD if you need PSF in the source plane.
 source_psf = get_source_psf(pix_wid,src_params)
 
-#Display the PSF at source plane as an image
+#Display the source blur PSF on the source plane as an image
 sz = source_psf.shape
 x = np.arange(-(sz[1]//2),(sz[1]//2)+1,1)*pix_wid
 y = np.arange(-(sz[0]//2),(sz[0]//2)+1,1)*pix_wid
@@ -24,14 +24,15 @@ plt.title('X-ray source PSF at source plane')
 plt.colorbar()
 plt.show()
 
-#To get PSF on the detector plane, supply SOD and ODD = SDD - SOD to the function get_source_psf
-sod = 25000
-sdd = 71000 
+#To get source blur PSF on the detector plane, supply SOD and ODD = SDD - SOD to the function get_source_psf
+sod = 25000 #in micrometers
+sdd = 71000 #in micrometers
 source_psf = get_source_psf(pix_wid,src_params,sod,sdd-sod)
+
 #help(get_source_psf)
 #Uncomment the above line to get help on using the function get_source_psf
 
-#Display the PSF at detector plane as an image
+#Display the source blur PSF on the detector plane as an image
 sz = source_psf.shape
 x = np.arange(-(sz[1]//2),(sz[1]//2)+1,1)*pix_wid
 y = np.arange(-(sz[0]//2),(sz[0]//2)+1,1)*pix_wid

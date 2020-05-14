@@ -7,8 +7,8 @@ rad_file = 'data/horz_edge_25mm.tif' #Filename of radiograph
 bright_file = 'data/horz_bright.tif' #Bright field
 dark_file = 'data/horz_dark.tif' #Dark field
 
-sdd = 71003.08 #Source to detector distance (SDD)
-sod = 24751.89 #Source to object distance (SOD)
+sdd = 71003.08 #Source to detector distance (SDD) in micrometers
+sod = 24751.89 #Source to object distance (SOD) in micrometers
 pix_wid = 0.675 #Pixel width in micrometers
 reg_param = 0.1 #Regularization parameter
 
@@ -31,14 +31,13 @@ det_params = {'detector_FWHM_1':1.85,
                 'cutoff_FWHM_1_multiplier':10, 
                 'cutoff_FWHM_2_multiplier':10}
 
-#Deblur the artifact using Wiener filtering
+#Deblur the radiograph using Wiener filter
 wiener_rad = wiener_deblur(norm_rad,sod,sdd-sod,pix_wid,src_params,det_params,reg_param)
 
-#Display deblurred radiograph of artifact
-mag = (sdd-sod)/sod
+#Display deblurred radiograph
 sz = wiener_rad.shape
-x = np.arange(-(sz[1]//2),(sz[1]//2)+1,1)*pix_wid/mag
-y = np.arange(-(sz[0]//2),(sz[0]//2)+1,1)*pix_wid/mag
+x = np.arange(-(sz[1]//2),(sz[1]//2)+1,1)*pix_wid
+y = np.arange(-(sz[0]//2),(sz[0]//2)+1,1)*pix_wid
 plt.pcolormesh(x,y,wiener_rad,cmap='gray')
 plt.xlabel('micrometers')
 plt.ylabel('micrometers')

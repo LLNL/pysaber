@@ -10,25 +10,25 @@ from pysaber.optimsr import error_function,jacobian_function,set_model_params
 from scipy.optimize import minimize,check_grad,approx_fprime
 import matplotlib.pyplot as plt
 
-def estimate_blur(rads,sod,odd,pix_wid,thresh=1e-6,pad=[3,3],mask=None,edge=None,bdary_mask=5.0,perp_mask=5.0,power=1.0,save_dir='./',only_src=False,only_det=False,mix_det=True):
+def estimate_blur(rads,sod,odd,pix_wid,edge,thresh=1e-6,pad=[3,3],masks=None,bdary_mask=5.0,perp_mask=5.0,power=1.0,save_dir='./',only_src=False,only_det=False,mix_det=True):
     """
     Estimate parameters of point spread functions (PSF) that model X-ray source blur and/or detector blur from normalized radiographs of a straight sharp edge or mutually perpendicular intersecting pair of sharp edges. 
 
-    This function is used to estimate parameters of the PSFs that model X-ray source blur and/or detector blur. It takes as input the normalized radiographs at multiple source to object distances (SOD) and object to detector distances (ODD). If each radiograph has a single straight edge, then the measurement must be repeated for two different, preferably perpendicular, orientations of the edge. If the radiograph consists of two intersecting perpendicular edges, then a single radiograph at each specified SOD/ODD is sufficient. Simultaneous estimation of source and detector blur will require radiographs at a minimum of two different value pairs for SOD/ODD. During PSF parameter estimation, the influence of certain regions within each radiograph can be removed by masking. For more details, please read ahead and also refer to the document listed in the references.  
+    This function is used to estimate parameters of the PSFs that model X-ray source blur and/or detector blur. It takes as input the normalized radiographs at multiple source to object distances (SOD) and object to detector distances (ODD). If each radiograph has a single straight edge, then the measurement must be repeated for two different, preferably perpendicular, orientations of the edge. If the radiograph consists of two intersecting perpendicular edges, then a single radiograph at each specified SOD/ODD is sufficient. Simultaneous estimation of source and detector blur will require radiographs at a minimum of two different value pairs for SOD/ODD. During PSF parameter estimation, the influence of certain regions within each radiograph can be removed by masking. For more details, please read ahead and also refer to the documents listed in :ref:`sec_refs`.  
 
     Args:
         rads (list): List of radiographs, each of type numpy.ndarray, at various SODs and ODDs. Each radiograph must be normalized using the bright-field (also called flat-field) and dark-field images.
         sod (list): List of source to object distances (SOD), each of type *float*, at which each corresponding radiograph in the list :attr:`rads` was acquired. 
         odd (list): List of object to detector distances (ODD), each of type *float*, at which each corresponding radiograph in the list :attr:`rads` was acquired.
         pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
+        edge (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If :attr:`edge` is ``perpendicular``, then each radiograph is assumed to have two mutually perpendicular edges. If it is ``straight``, then each radiograph is assumed to have a single straight edge. Only ``perpendicular`` and ``straight`` are legal choices for :attr:`edge`. 
         thresh (float): Convergence threshold for the minimizer during parameter estimation. The iterations stop when the ratio of the reduction in the error function (cost value) and the magnitude of the error function is lower than :attr:`thresh`. This is the parameter :attr:`ftol` that is specified in the :attr:`options` parameter of ``scipy.optimize.minimize``. The optimizer used is L-BFGS-B. During joint estimation of source and detector blur, the convergence threshold for the minimizer during the first two initialization steps is ten times this value. 
+        pad (list): List of two integers that determine the amount of padding that must be applied to the radiographs to reduce aliasing during convolution. The number of rows/columns after padding is equal to :attr:`pad_factor[0]`/:attr:`pad_factor[1]` times the number of rows/columns in each radiograph before padding. For example, if the first element in :attr:`pad_factor` is ``2``, then the radiograph is padded to twice its size along the first dimension. 
+        masks (list): List of boolean masks, each of type numpy.ndarray and same shape as the radiograph, that is used to exclude pixels from blur estimation. This is in addition to the masking specified by :attr:`bdary_mask` and :attr:`perp_mask`. An example use case is if some pixels in the radiograph :attr:`rads[i]` are bad, then those pixels can be excluded from blur estimation by setting the corresponding entries in :attr:`masks[i]` to ``False`` and ``True`` otherwise. If None, no user specified mask is used.
         bdary_mask (float): Percentage of image region in the radiographs as measured from the outer edge going inwards that must be excluded from blur estimation. Pixels are excluded (or masked) beginning from the outermost periphery of the image and working inwards until the specified percentage of pixels is reached.
-        perp_mask (float): Percentage of circular region to ignore during blur estimation around the intersecting corner of two perpendicular edges. Ignored if :attr:`edge` is ``straight-edge``.
+        perp_mask (float): Percentage of circular region to ignore during blur estimation around the intersecting corner of two perpendicular edges. Ignored if :attr:`edge` is ``straight``.
         power (float): Shape parameter of the density function used to model each PSF. For example, choosing a value of one for :attr:`power` creates an exponential (Laplacian) density function. Choosing a value of two for :attr:`power` creates a Gaussian density function.
-        pad (list): Pad factor is a list of two integers that determine the amount of padding that must be applied to the radiographs to reduce aliasing during convolution. The number of rows/columns after padding is equal to :attr:`pad_factor[0]`/:attr:`pad_factor[1]` times the number of rows/columns in each radiograph before padding. For example, if the first element in :attr:`pad_factor` is 2, then the radiograph is padded to twice its size along the first dimension. 
-        mask (numpy.ndarray): Boolean mask of the same shape as the radiograph that is used to exclude pixels from blur estimation. An example use case is if some pixels in the radiographs are bad, then those pixels can be excluded from blur estimation by setting the corresponding entries in mask to false and true otherwise.
-        edge (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If :attr:`edge` is ``perpendicular``, then each radiograph is assumed to have two mutually perpendicular edges. If it is ``straight-edge``, then each radiograph is assumed to have a single straight edge. Only ``perpendicular`` and ``straight-edge`` are legal choices for :attr:`edge`. 
-        save_dir (str): Directory where estimated parameters are saved in *yaml* format. Source blur parameters are saved in the file source_params.yml within the folder :attr:`save_dir`. Similary, detector blur and transmission function parameters are saved as detector_params.yml and transmission_params.yml.
+        save_dir (str): Directory where estimated parameters are saved in *yaml* file format. Source blur parameters are saved in the file ``source_params.yml`` within the folder :attr:`save_dir`. Similary, detector blur and transmission function parameters are saved as ``detector_params.yml`` and ``transmission_params.yml``.
         only_src (bool): If ``True``, only estimate source blur parameters.
         only_det (bool): If ``True``, only estimate detector blur parameters.
         mix_det (bool): If ``True``, do not use mixture model for detector blur.
@@ -36,9 +36,9 @@ def estimate_blur(rads,sod,odd,pix_wid,thresh=1e-6,pad=[3,3],mask=None,edge=None
     Returns:
         tuple: Tuple of objects containing the estimated parameters. If estimating both source and detector blur parameters, returns the three element tuple (``src_pars``, ``det_pars``, ``tran_pars``). If estimating only source blur parameters, returns the two element tuple (``src_pars``, ``tran_pars``). If estimating only detector blur parameters, returns the two element tuple (``det_pars``, ``tran_pars``). ``src_pars`` and ``det_pars`` are python dictionaries. ``tran_pars`` is a list of lists. 
 
-        ``src_pars`` contains the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the exponential PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of ``src_pars['cutoff_FWHM_multiplier']`` times half the maximum FWHM (maximum of ``src_pars['source_FWHM_x_axis']`` and ``src_pars['source_FWHM_y_axis']``). 
+        ``src_pars`` contains the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the source PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_x_axis']/2`` and ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_y_axis']/2``. 
 
-        ``det_pars`` contains estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between 0 and 1 and is a measure of the amount of contribution of the first exponential to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of ``det_pars['cutoff_FWHM_1_multiplier']*det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']*det_pars['detector_FWHM_2']/2``. If ``mix_det`` is False, then value for key ``detector_weight_1`` is fixed at 1 and value for key ``detector_FWHM_2`` is fixed at 0. 
+        ``det_pars`` contains estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first density function in the mixture density model for detector blur. The first density function is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second density function in the mixture density model. This density function has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between ``0`` and ``1`` and is a measure of the amount of contribution of the first density function to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``det_pars['cutoff_FWHM_1_multiplier']`` times ``det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']`` times ``det_pars['detector_FWHM_2']/2``. If ``mix_det`` is ``False``, then value for key ``detector_weight_1`` is fixed at ``1`` and value for key ``detector_FWHM_2`` is fixed at ``0``. 
 
         ``tran_pars`` contains estimated parameters of the transmission function for each input radiograph. This return value is a list of lists, where each inner nested list consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. The number of nested lists in the returned list equals the number of input radiographs. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise.
     """
@@ -50,11 +50,13 @@ def estimate_blur(rads,sod,odd,pix_wid,thresh=1e-6,pad=[3,3],mask=None,edge=None
     trans_models,trans_params,trans_bounds = [],[],[]
     for j in range(len(rads)):
         if edge == 'perpendicular':
-            trans_dict,params,bounds = ideal_trans_perp_corner(rads[j],bdary_mask_perc=bdary_mask,pad_factor=pad,mask=mask,perp_mask_perc=perp_mask)
-        elif edge == 'straight-edge':
-            trans_dict,params,bounds = ideal_trans_sharp_edge(rads[j],bdary_mask_perc=bdary_mask,pad_factor=pad,mask=mask)
+            mk = None if masks is None else masks[j]
+            trans_dict,params,bounds = ideal_trans_perp_corner(rads[j],bdary_mask_perc=bdary_mask,pad_factor=pad,mask=mk,perp_mask_perc=perp_mask)
+        elif edge == 'straight':
+            mk = None if masks is None else masks[j]
+            trans_dict,params,bounds = ideal_trans_sharp_edge(rads[j],bdary_mask_perc=bdary_mask,pad_factor=pad,mask=mk)
         else:
-            raise ValueError('Argument edge must be either perpendicular or straight-edge')        
+            raise ValueError('Argument edge must be either perpendicular or straight')        
 
         #trans_dict has ideal transmission function, masks, etc
         trans_models.append(trans_dict)
@@ -270,13 +272,13 @@ def get_blur_psfs(norm_rads,trans_models,sod,sdd,pix_wid,src_est,det_est,trans_e
             args_bounds.extend(bound) 
         print("Will optimize transmission function parameters")
 
-    eps = np.sqrt(np.finfo(float).eps)
-    print("----------------------------")
-    grad_true = jacobian_function(np.array(args_var),src_mods,det_mod,trans_mods,src_est,det_est,trans_est,norm_rads,pix_wid,mix_det)
-    grad_num = approx_fprime(np.array(args_var),error_function,eps,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,norm_rads,pix_wid,mix_det)
-    print("eps is {}".format(eps))
-    print("Error in jacobian at {} is {}. Numerical jacobian is {}. True jacobian is {}".format(args_var,np.sqrt(np.sum((grad_num-grad_true)**2)),grad_num,grad_true))
-    print("###########################")
+#    eps = np.sqrt(np.finfo(float).eps)
+#    print("----------------------------")
+#    grad_true = jacobian_function(np.array(args_var),src_mods,det_mod,trans_mods,src_est,det_est,trans_est,norm_rads,pix_wid,mix_det)
+#    grad_num = approx_fprime(np.array(args_var),error_function,eps,src_mods,det_mod,trans_mods,src_est,det_est,trans_est,norm_rads,pix_wid,mix_det)
+#    print("eps is {}".format(eps))
+#    print("Error in jacobian at {} is {}. Numerical jacobian is {}. True jacobian is {}".format(args_var,np.sqrt(np.sum((grad_num-grad_true)**2)),grad_num,grad_true))
+#    print("###########################")
 
     cost = None
     if(src_est or det_est or trans_est):
@@ -330,18 +332,18 @@ def get_blur_psfs(norm_rads,trans_models,sod,sdd,pix_wid,src_est,det_est,trans_e
 
 def get_source_psf(pix_wid,src_pars,sod=1.0,odd=1.0):
     """
-    Function to compute the source PSF in the plane of the X-ray source or the detector. 
+    Function to compute the point spread function (PSF) of X-ray source blur in the plane of the X-ray source or the detector. 
 
-    If source to object distance (SOD) is equal to object to detector distance (ODD), then PSF on the detector plane is same as that on the plane of the X-ray source. If PSF on detector plane is desired, it is required to specify the SOD and ODD. If PSF on source plane is desired, use the default values for SOD and ODD. 
+    If source to object distance (SOD) is equal to object to detector distance (ODD), then the PSF on the detector plane is same as that on the plane of the X-ray source. If PSF on detector plane is desired, it is required to specify the SOD and ODD. If PSF on source plane is desired, use the default values for SOD and ODD. 
 
     Args:
         pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
-        src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the exponential PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of ``src_pars['cutoff_FWHM_multiplier']`` times half the maximum FWHM (maximum of ``src_pars['source_FWHM_x_axis']`` and ``src_pars['source_FWHM_y_axis']``). 
-        sod (float): Source to object distances (SOD). 
-        odd (float): Object to detector distances (ODD).
+        src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the source PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_x_axis']/2`` and ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_y_axis']/2``. 
+        sod (float): Source to object distance (SOD). 
+        odd (float): Object to detector distance (ODD).
     
     Returns:
-        numpy.ndarray: PSF of X-ray source
+        numpy.ndarray: PSF of X-ray source blur.
     """
 
     max_wid = 0.5*src_pars['cutoff_FWHM_multiplier']*max(src_pars['source_FWHM_x_axis'],src_pars['source_FWHM_y_axis'])*odd/sod
@@ -350,11 +352,11 @@ def get_source_psf(pix_wid,src_pars,sod=1.0,odd=1.0):
      
 def get_detector_psf(pix_wid,det_pars):
     """
-        Function to compute the detector PSF. 
+        Function to compute point spread function (PSF) of detector blur. 
 
         Args:
             pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
-            det_pars (dict): Dictionary containing the estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between 0 and 1 and is a measure of the amount of contribution of the first exponential to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of ``det_pars['cutoff_FWHM_1_multiplier']*det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']*det_pars['detector_FWHM_2']/2``. If ``mix_det`` is False, then value for key ``detector_weight_1`` is fixed at 1 and value for key ``detector_FWHM_2`` is fixed at 0. 
+            det_pars (dict): Dictionary containing the estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first density function in the mixture density model for detector blur. The first density function is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second density function in the mixture density model. This density function has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between ``0`` and ``1`` and is a measure of the amount of contribution of the first density function to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``det_pars['cutoff_FWHM_1_multiplier']`` times ``det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']`` times ``det_pars['detector_FWHM_2']/2``. 
         
         Returns:
             numpy.ndarray: PSF of detector
@@ -366,17 +368,17 @@ def get_detector_psf(pix_wid,det_pars):
 
 def get_effective_psf(pix_wid,src_pars,det_pars,sod=1,odd=1): 
     """
-        Function to compute the effective PSF, which is the convolution of X-ray source and detector PSF. 
+        Function to compute the effective point spread function (PSF), which is the convolution of X-ray source and detector PSFs. 
     
         Args:
             pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
-            src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the exponential PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of ``src_pars['cutoff_FWHM_multiplier']`` times half the maximum FWHM (maximum of ``src_pars['source_FWHM_x_axis']`` and ``src_pars['source_FWHM_y_axis']``). 
-            det_pars (dict): Dictionary containing the estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between 0 and 1 and is a measure of the amount of contribution of the first exponential to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of ``det_pars['cutoff_FWHM_1_multiplier']*det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']*det_pars['detector_FWHM_2']/2``. If ``mix_det`` is False, then value for key ``detector_weight_1`` is fixed at 1 and value for key ``detector_FWHM_2`` is fixed at 0. 
-            sod (float): Source to object distances (SOD). 
-            odd (float): Object to detector distances (ODD).
+            src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the source PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_x_axis']/2`` and ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_y_axis']/2``. 
+            det_pars (dict): Dictionary containing the estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first density function in the mixture density model for detector blur. The first density function is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second density function in the mixture density model. This density function has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between ``0`` and ``1`` and is a measure of the amount of contribution of the first density function to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``det_pars['cutoff_FWHM_1_multiplier']`` times ``det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']`` times ``det_pars['detector_FWHM_2']/2``. 
+            sod (float): Source to object distance (SOD). 
+            odd (float): Object to detector distance (ODD).
         
         Returns:
-            numpy.ndarray: Effective blur PSF.
+            numpy.ndarray: PSF of effective blur in the plane of detector.
     """
     #if max_wid == None:
     max_wid = 0.5*src_pars['cutoff_FWHM_multiplier']*max(src_pars['source_FWHM_x_axis'],src_pars['source_FWHM_y_axis'])*odd/sod
@@ -389,22 +391,23 @@ def get_effective_psf(pix_wid,src_pars,det_pars,sod=1,odd=1):
 
 def apply_blur_psfs(rad,sod,odd,pix_wid,src_pars,det_pars,padded_widths=[0,0],pad_type='constant',pad_constant=0):
     """
-        Function to blur the input radiograph with X-ray source and detector blur.
+        Function to blur the input radiograph with point spread functions (PSF) of X-ray source and detector blurs.
 
-        This function blurs the input radiograph with X-ray source and detector blur with the specified PSF parameters. This function is useful to observe the effect of source and detector blur on a simulated radiograph without any blur.
+        This function blurs the input radiograph with X-ray source blur and detector blur with the specified point spread function (PSF) parameters. This function is useful to observe the effect of source and detector blurs on a simulated radiograph.
 
         Args:
-            sod (float): Source to object distance (SOD). 
-            odd (float): Object to detector distance (ODD).
+            rad (numpy.ndarray): Radiograph of type numpy.ndarray that is normalized using the bright-field (also called flat-field) and dark-field images.
+            sod (float): Source to object distance (SOD) of radiograph. 
+            odd (float): Object to detector distance (ODD) of radiograph.
             pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
-            src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the exponential PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of ``src_pars['cutoff_FWHM_multiplier']`` times half the maximum FWHM (maximum of ``src_pars['source_FWHM_x_axis']`` and ``src_pars['source_FWHM_y_axis']``). 
-            det_pars (dict): Dictionary containing the estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between 0 and 1 and is a measure of the amount of contribution of the first exponential to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of ``det_pars['cutoff_FWHM_1_multiplier']*det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']*det_pars['detector_FWHM_2']/2``. 
-            padded_widths (list): List of two integers that specifies the amount of padding already applied to input radiograph. The first integer specifies the padding applied along the first dimension of radiograph. The second integer specifies the padding applied along the second dimension of radiograph. Assumes ``padded_widths[k]//2`` amount of padding is applied at both the left and right extremeties of dimension ``k``, where ``k`` is ``0`` or ``1``.
+            src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the source PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_x_axis']/2`` and ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_y_axis']/2``. 
+            det_pars (dict): Dictionary containing the estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first density function in the mixture density model for detector blur. The first density function is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second density function in the mixture density model. This density function has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between ``0`` and ``1`` and is a measure of the amount of contribution of the first density function to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``det_pars['cutoff_FWHM_1_multiplier']`` times ``det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']`` times ``det_pars['detector_FWHM_2']/2``. 
+            padded_widths (list): List of two integers that specifies the amount of padding already applied to input radiograph. The first integer specifies the padding applied along the first dimension of radiograph. The second integer specifies the padding applied along the second dimension of radiograph. Assumes ``padded_widths[k]/2`` amount of padding is applied at both the left and right extremities of dimension ``k``, where ``k`` is ``0`` or ``1``.
             pad_type (str): Type of additional padding that must be used if amount of padding specified in :attr:`padded_widths` is insufficient. Supported values are ``edge`` and ``constant``.  
             pad_constant (float): If :attr:`pad_type` is `constant`, specify the constant value that must be padded.
         
         Returns:
-            numpy.ndarray: Radiograph that is blurred using X-ray source and detector blur.
+            numpy.ndarray: Radiograph that is blurred using X-ray source and detector blurs.
     """
     input_rad = rad 
     max_wid = pix_wid*(min(padded_widths)//2)
@@ -417,34 +420,34 @@ def apply_blur_psfs(rad,sod,odd,pix_wid,src_pars,det_pars,padded_widths=[0,0],pa
     blurred_rad = convolve_psf(input_rad,new_psf,padded_widths,is_psf=True,pad_type=pad_type,pad_constant=pad_constant)
     return blurred_rad
     
-def get_trans_fit(rad,sod,odd,pix_wid,src_pars,det_pars,trans_pars,pad=[3,3],edge=None):
+def get_trans_fit(rad,sod,odd,pix_wid,src_pars,det_pars,tran_pars,edge,pad=[3,3]):
     """
         Function to compute the blur model prediction and ideal transmission function for a radiograph with a single straight edge or two mutually perpendicular edges. 
 
-        For a measured radiograph consisting of a straight sharp edge or two mutually perpendicular edges, get the ideal transmission function and a prediction from the blur model for the normalized radiograph in the presence of X-ray source and detector blurs. 
+        For a measured radiograph consisting of a straight sharp edge or two mutually perpendicular edges, get the ideal transmission function and the predicted radiograph from the blur model. Here, the blur model is used to model the impact of blur due to X-ray source and detector.
     
         Parameters:
             rad (numpy.ndarray): Normalized radiograph of a straight sharp edge or two mutually perpendicular edges.
             sod (float): Source to object distance (SOD) for the radiograph :attr:`rad`.
             odd (float): Object to detector distance (SDD) for the radiograph :attr:`rad`.
             pix_wid (float): Effective width of each detector pixel. Note that this is the effective pixel size given by dividing the physical width of each detector pixel by the zoom factor of the optical lens.
-            src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the exponential PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of ``src_pars['cutoff_FWHM_multiplier']`` times half the maximum FWHM (maximum of ``src_pars['source_FWHM_x_axis']`` and ``src_pars['source_FWHM_y_axis']``). 
-            det_pars (dict): Dictionary containing estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first exponential in the mixture density model for detector blur. The first exponential is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second exponential in the mixture density model. This exponential has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between 0 and 1 and is a measure of the amount of contribution of the first exponential to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, of the maximum of ``det_pars['cutoff_FWHM_1_multiplier']*det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']*det_pars['detector_FWHM_2']/2``. 
-            tran_pars (list): ``tran_pars`` contains estimated parameters of the transmission function for the input radiograph. It consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise. If not specified (or specified as None), then the best fitting transmission function parameters are estimated using RANSAC regression.
-            pad (list): Pad factor is a list of two integers that determine the amount of padding that must be applied to the radiographs to reduce aliasing during convolution. The number of rows/columns after padding is equal to :attr:`pad_factor[0]`/:attr:`pad_factor[1]` times the number of rows/columns in each radiograph before padding. For example, if the first element in :attr:`pad_factor` is 2, then the radiograph is padded to twice its size along the first dimension. 
-            edge (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If :attr:`edge` is ``perpendicular``, then each radiograph is assumed to have two mutually perpendicular edges. If it is ``straight-edge``, then each radiograph is assumed to have a single straight edge. Only ``perpendicular`` and ``straight-edge`` are legal choices for :attr:`edge`.
+            src_pars (dict): Dictionary containing the estimated parameters of X-ray source PSF. It consists of several key-value pairs. The value for key ``source_FWHM_x_axis`` is the full width half maximum (FWHM) of the source PSF along the x-axis (i.e., second numpy.ndarray dimension). The value for key ``source_FWHM_y_axis`` is the FWHM of source PSF along the y-axis (i.e., first numpy.ndarray dimension). All FWHMs are for the source PSF in the plane of the X-ray source (and not the plane of the detector). The value for key ``cutoff_FWHM_multiplier`` decides the non-zero spatial extent of the source PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_x_axis']/2`` and ``src_pars['cutoff_FWHM_multiplier']`` times ``src_pars['source_FWHM_y_axis']/2``. 
+            det_pars (dict): Dictionary containing the estimated parameters of detector PSF. It consists of several key-value pairs. The value for key ``detector_FWHM_1`` is the FWHM of the first density function in the mixture density model for detector blur. The first density function is the most dominant part of detector blur. The value for key ``detector_FWHM_2`` is the FWHM of the second density function in the mixture density model. This density function has the largest FWHM and models the long running tails of the detector blur's PSF. The value for key ``detector_weight_1`` is between ``0`` and ``1`` and is a measure of the amount of contribution of the first density function to the detector blur. The values for keys ``cutoff_FWHM_1_multiplier`` and ``cutoff_FWHM_2_multiplier`` decide the non-zero spatial extent of the detector PSF. The PSF is clipped to zero beginning at a distance, as measured from the PSF's origin, equal to the maximum of ``det_pars['cutoff_FWHM_1_multiplier']`` times ``det_pars['detector_FWHM_1']/2`` and ``det_pars['cutoff_FWHM_2_multiplier']`` times ``det_pars['detector_FWHM_2']/2``. 
+            tran_pars (list): List containing the estimated parameters of the transmission function for the input radiograph. It consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise. If not specified (or specified as None), then the best fitting transmission function parameters are estimated using RANSAC regression.
+            edge (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If :attr:`edge` is ``perpendicular``, then each radiograph is assumed to have two mutually perpendicular intersecting edges. If it is ``straight``, then each radiograph is assumed to have a single straight edge. Only ``perpendicular`` and ``straight`` are legal choices for :attr:`edge`.
+            pad (list): List of two integers that determine the amount of padding that must be applied to the radiographs to reduce aliasing during convolution. The number of rows/columns after padding is equal to :attr:`pad_factor[0]`/:attr:`pad_factor[1]` times the number of rows/columns in each radiograph before padding. For example, if the first element in :attr:`pad_factor` is ``2``, then the radiograph is padded to twice its size along the first dimension. 
 
         Returns:
             tuple: Tuple of two arrays of type ``numpy.ndarray``. The first array is blurred radiograph as predicted by the blur model. The second array is transmission function, which is the ideal readiograph in the absence of source and detector blur.  
     """
     if edge == 'perpendicular':
         trans_dict,params,bounds = ideal_trans_perp_corner(rad,pad_factor=pad)
-    elif edge == 'straight-edge':
+    elif edge == 'straight':
         trans_dict,params,bounds = ideal_trans_sharp_edge(rad,pad_factor=pad)
     else:
-        raise ValueError('Argument edge must be either perpendicular or straight-edge')        
+        raise ValueError('Argument edge must be either perpendicular or straight')        
         
-    trans_mod = Transmission(trans_dict,trans_pars)
+    trans_mod = Transmission(trans_dict,tran_pars)
     _,trans,_ = trans_mod.get_trans()
     pad_widths = (np.array(trans.shape)-np.array(rad.shape))//2 #assumes symmetric padding
     pred_rad = apply_blur_psfs(trans,sod,odd,pix_wid,src_pars,det_pars,padded_widths=pad_widths)
@@ -452,36 +455,36 @@ def get_trans_fit(rad,sod,odd,pix_wid,src_pars,det_pars,trans_pars,pad=[3,3],edg
     trans = trans[pad_widths[0]:-pad_widths[0],pad_widths[1]:-pad_widths[1]] 
     return pred_rad,trans
 
-def get_trans_masks(rad,trans_pars=None,pad=[1,1],mask=None,edge=None,bdary_mask=5.0,perp_mask=5.0):
+def get_trans_masks(rad,edge,tran_pars=None,pad=[1,1],mask=None,bdary_mask=5.0,perp_mask=5.0):
     """
-        Function to compute ideal transmission function and mask for a radiograph with a single straight edge or two mutually perpendicular edges. 
+        Function to compute transmission function and masks for a radiograph with a single straight edge or two mutually perpendicular edges. 
 
-        For a measured radiograph consisting of a straight sharp edge or two mutually perpendicular edges, get the ideal transmission function and mask normalized radiograph in the presence of X-ray source and detector blurs. 
+        For a measured radiograph consisting of a straight sharp edge or two mutually perpendicular edges, get the transmission function, mask for transmission function, and mask for radiograph. 
         
         Parameters:
             rad (numpy.ndarray): Normalized radiograph of a straight sharp edge or two mutually perpendicular edges.
-            tran_pars (list): ``tran_pars`` contains estimated parameters of the transmission function for the input radiograph. It consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise. If not specified (or specified as None), then the best fitting transmission function parameters are estimated using RANSAC regression.
-            pad (list): Pad factor is a list of two integers that determine the amount of padding that must be applied to the radiographs to reduce aliasing during convolution. The number of rows/columns after padding is equal to :attr:`pad_factor[0]`/:attr:`pad_factor[1]` times the number of rows/columns in each radiograph before padding. For example, if the first element in :attr:`pad_factor` is 2, then the radiograph is padded to twice its size along the first dimension. 
-            mask (numpy.ndarray): Boolean mask of the same shape as the radiograph that is used to exclude pixels from blur estimation. An example use case is if some pixels in the radiographs are bad, then those pixels can be excluded from blur estimation by setting the corresponding entries in mask to false and true otherwise.
-            edge (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If :attr:`edge` is ``perpendicular``, then each radiograph is assumed to have two mutually perpendicular edges. If it is ``straight-edge``, then each radiograph is assumed to have a single straight edge. Only ``perpendicular`` and ``straight-edge`` are legal choices for :attr:`edge`.
+            edge (str): Used to indicate whether there is a single straight edge or two mutually perpendicular edges in each radiograph. If :attr:`edge` is ``perpendicular``, then each radiograph is assumed to have two mutually perpendicular edges. If it is ``straight``, then each radiograph is assumed to have a single straight edge. Only ``perpendicular`` and ``straight`` are legal choices for :attr:`edge`.
+            tran_pars (list): List containing the estimated parameters of the transmission function for the input radiograph. It consists of two parameters of type `float`. These `float` values give the low and high values respectively of the transmission function. Note that the transmission function is the normalized radiograph image that would have resulted in the absence of blur and noise. If not specified (or specified as None), then the best fitting transmission function parameters are estimated using RANSAC regression. If specified as ``[0,1]``, this function returns the ideal transmission function.
+            pad (list): List of two integers that determine the amount of padding that must be applied to the radiographs to reduce aliasing during convolution. The number of rows/columns after padding is equal to :attr:`pad_factor[0]`/:attr:`pad_factor[1]` times the number of rows/columns in each radiograph before padding. For example, if the first element in :attr:`pad_factor` is ``2``, then the radiograph is padded to twice its size along the first dimension. 
+            mask (numpy.ndarray): Boolean mask of the same shape as the radiograph that is used to exclude pixels from blur estimation. This is in addition to the masking specified by :attr:`bdary_mask` and :attr:`perp_mask`. An example use case is if some pixels in the radiograph :attr:`rad` are bad, then those pixels can be excluded from blur estimation by setting the corresponding entries in :attr:`mask` to ``False`` and ``True`` otherwise. If None, no user specified mask is used.
             bdary_mask (float): Percentage of image region in the radiographs as measured from the outer edge going inwards that must be excluded from blur estimation. Pixels are excluded (or masked) beginning from the outermost periphery of the image and working inwards until the specified percentage of pixels is reached.
-            perp_mask (float): Percentage of circular region to ignore during blur estimation around the intersecting corner of two perpendicular edges. Ignored if :attr:`edge` is ``straight-edge``.
+            perp_mask (float): Percentage of circular region to ignore during blur estimation around the intersecting corner of two perpendicular edges. Ignored if :attr:`edge` is ``straight``.
 
         Returns:
-            tuple: Tuple of three arrays of type ``numpy.ndarray``. The first array is the ideal transmission function, which is the ideal readiograph in the absence of source and detector blur. The second and third arrays are the masks for the transmission function and radiograph respectively. The mask array indicates what pixels must be included (pixel value of ``True``) or excluded (pixel value of ``False``) during blur estimation.  
+            tuple: Tuple of three arrays each of type ``numpy.ndarray``. The first array is the transmission function, which is the ideal readiograph in the absence of source and detector blur. The second and third arrays are the masks for the transmission function and radiograph respectively. The mask array indicates what pixels must be included (pixel value of ``True``) or excluded (pixel value of ``False``) during blur estimation.  
     """
  
     if edge == 'perpendicular':
         trans_dict,init_params,bounds = ideal_trans_perp_corner(rad,bdary_mask_perc=bdary_mask,pad_factor=pad,mask=mask,perp_mask_perc=perp_mask)
-    elif edge == 'straight-edge':
+    elif edge == 'straight':
         trans_dict,init_params,bounds = ideal_trans_sharp_edge(rad,bdary_mask_perc=bdary_mask,pad_factor=pad,mask=mask)
     else:
-        raise ValueError('Argument edge must be either perpendicular or straight-edge')        
+        raise ValueError('Argument edge must be either perpendicular or straight')        
 
-    if trans_pars is None:
+    if tran_pars is None:
         trans_mod = Transmission(trans_dict,init_params)
     else:
-        trans_mod = Transmission(trans_dict,trans_pars)
+        trans_mod = Transmission(trans_dict,tran_pars)
         
     rmask,trans,tmask = trans_mod.get_trans()
     #assert np.all(rmask==tmask)

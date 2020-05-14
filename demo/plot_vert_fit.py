@@ -21,7 +21,7 @@ src_params = {'source_FWHM_x_axis':2.69,
                 'source_FWHM_y_axis':3.01, 
                 'norm_power':1.0,
                 'cutoff_FWHM_multiplier':10}
-#Parameters detector blur
+#Parameters of detector blur
 det_params = {'detector_FWHM_1':1.85, 
                 'detector_FWHM_2':126.5, 
                 'detector_weight_1':0.916, 
@@ -32,7 +32,7 @@ det_params = {'detector_FWHM_1':1.85,
 trans_params = [0.015,0.98]
 
 #Get the blurred radiograph as predicted by the blur model
-pred_nrad,_ = get_trans_fit(nrad,sod,sdd-sod,pix_wid,src_params,det_params,trans_params,pad=[3,3],edge='straight-edge')
+pred_nrad,_ = get_trans_fit(nrad,sod,sdd-sod,pix_wid,src_params,det_params,trans_params,edge='straight',pad=[3,3])
 
 #Show a line plot comparing the measured radiograph and the predicted blurred radiograph
 sz = nrad.shape
@@ -41,7 +41,7 @@ mid = (pred_nrad.shape[0]//2,pred_nrad.shape[1]//2)
 
 plt.plot(coords,nrad[sz[0]//2,:])
 #Due to padding, pred_nrad is three times the size of nrad in each dimension
-#For proper alignment in presence of padding, both nrad and pred_nrad are center aligned
+#For proper alignment in the presence of padding, both nrad and pred_nrad are center aligned
 #Center alignment is used since an equal amount of padding is applied at both ends of each axis
 plt.plot(coords,pred_nrad[mid[0],mid[1]-(sz[1]//2):mid[1]+(sz[1]//2)])
 plt.xlabel('micrometers')

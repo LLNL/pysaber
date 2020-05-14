@@ -14,6 +14,7 @@ det_params = {'detector_FWHM_1':1.85,
 
 #Get point spread function (PSF) of detector blur as a 2D numpy array.
 detector_psf = get_detector_psf(pix_wid,det_params)
+
 #help(get_detector_psf)
 #Uncomment the above line to get help in using the function get_detector_psf
 

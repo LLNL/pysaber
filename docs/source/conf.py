@@ -18,9 +18,8 @@ sys.path.insert(0, os.path.abspath('../../pysaber'))
 # -- Project information -----------------------------------------------------
 
 project = 'PySABER'
-copyright = '2020, K. Aditya Mohan'
+copyright = '2020, Lawrence Livermore National Laboratory'
 author = 'K. Aditya Mohan'
-master_doc = 'index'
 
 # The full version, including alpha/beta/rc tags
 with open(os.path.abspath('../../VERSION')) as fh:
