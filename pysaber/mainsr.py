@@ -117,7 +117,7 @@ def estimate_blur(rads,sod,odd,pix_wid,edge,thresh=1e-6,pad=[3,3],masks=None,bda
             trans_bounds_src.append(trans_bounds[i])
             sod_src.append(sod[i])
             sdd_src.append(sdd[i])
-        elif sod[i] < sod_avg and not only_det:
+        elif sod[i] <= sod_avg and not only_det:
             rads_src.append(rads[i])
             trans_models_src.append(trans_models[i])
             trans_params_src.append(trans_params[i])
