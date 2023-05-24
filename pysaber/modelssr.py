@@ -378,7 +378,12 @@ class DetectorBlur(Blur):
         scale_2 = self.scale_2 if scale_2 is None else scale_2
         p = self.weight_1 if weight_1 is None else weight_1
         def psf_func(x,y,mix_det=True):
-            exp_1 = np.exp(-((scale_1*x)**2+(scale_1*y)**2)**(self.norm_pow/2.0))
+            if scale_1 != np.infty:
+                exp_1 = np.exp(-((scale_1*x)**2+(scale_1*y)**2)**(self.norm_pow/2.0))
+            else:
+                exp_1 = np.zeros_like(x)
+                exp_1[np.bitwise_and(x==0,y==0)] = 1.0
+
             if mix_det:
                 exp_2 = np.exp(-((scale_2*x)**2+(scale_2*y)**2)**(self.norm_pow/2.0))
                 psf_eff = p*exp_1/np.sum(exp_1)+(1.0-p)*exp_2/np.sum(exp_2)
@@ -466,7 +471,7 @@ class DetectorBlur(Blur):
             weight_1 = 0.0 if weight_1<0.0 else weight_1
             weight_1 = 1.0 if weight_1>1.0 else weight_1
             self.weight_1 = weight_1   
- 
+        
         cutoff_width = max(self.cutoff_FWHM_1*self.FWHM_1,self.cutoff_FWHM_2*self.FWHM_2)/2.0
         if cutoff_width>self.max_width and self.warn:
             print("WARN: The maximum width {} specified for detector PSF is less than the cutoff width {}".format(self.max_width,cutoff_width))
