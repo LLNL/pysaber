@@ -74,9 +74,9 @@ def estimate_blur(rads,sod,odd,pix_wid,edge,thresh=1e-6,pad=[3,3],masks=None,bda
     #It is recommended to run the blur model estimation in multiple stages
     #First, only estimate the detector blur using radiographs with the largest SODs
     #Radiographs with the largest SODs are expected to have minimal source blur
-    sod_avg = sum(sod)/len(sod) #Compute average of all SODs
+    sod_odd_avg_quotient = sum(np.array(sod)/np.array(odd))/len(sod) #Compute average of all SODs/ODDs
 
-    #Only include list elements with SOD > average of all SODs
+    #Only include list elements with SOD/ODD > average of all SODs/ODDs
     rads_det,trans_models_det,trans_params_det,trans_bounds_det,sod_det,sdd_det = [],[],[],[],[],[]
     for i in range(len(rads)):
         if only_det:
@@ -86,7 +86,7 @@ def estimate_blur(rads,sod,odd,pix_wid,edge,thresh=1e-6,pad=[3,3],masks=None,bda
             trans_bounds_det.append(trans_bounds[i])
             sod_det.append(sod[i])
             sdd_det.append(sdd[i])
-        elif sod[i] > sod_avg and not only_src:
+        elif sod[i]/odd[i] > sod_odd_avg_quotient and not only_src:
             rads_det.append(rads[i])
             trans_models_det.append(trans_models[i])
             trans_params_det.append(trans_params[i])
@@ -107,7 +107,7 @@ def estimate_blur(rads,sod,odd,pix_wid,edge,thresh=1e-6,pad=[3,3],masks=None,bda
     print("{:.2f} mins has elapsed".format((time.time()-start_time)/60.0))
 
     #Next, only estimate the source blur using radiographs at the smallest source to object distances
-    #Only include list elements with SOD < average of all SODs
+    #Only include list elements with SOD/ODD < average of all SODs/ODDs
     rads_src,trans_models_src,trans_params_src,trans_bounds_src,sod_src,sdd_src = [],[],[],[],[],[]
     for i in range(len(rads)):
         if only_src:
@@ -117,7 +117,7 @@ def estimate_blur(rads,sod,odd,pix_wid,edge,thresh=1e-6,pad=[3,3],masks=None,bda
             trans_bounds_src.append(trans_bounds[i])
             sod_src.append(sod[i])
             sdd_src.append(sdd[i])
-        elif sod[i] < sod_avg and not only_det:
+        elif sod[i]/odd[i] < sod_odd_avg_quotient and not only_det:
             rads_src.append(rads[i])
             trans_models_src.append(trans_models[i])
             trans_params_src.append(trans_params[i])
